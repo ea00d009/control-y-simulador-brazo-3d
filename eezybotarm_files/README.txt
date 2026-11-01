@@ -1,0 +1,4 @@
+EEZYbotARM by daGHIZmo on Thingiverse: https://www.thingiverse.com/thing:1015238
+
+Summary:
+This is a 3D printed robotic arm  The intent was to design something "easy" and cheap to built with a good visual impact also.  Test video: https://youtu.be/qovZKW0DxWkhttps://youtu.be/N55W8TdMfCoI spent time to look around the web at some examples available that could be a good starting from, and between all I found interesting the phenoptix MeArm V4 project (http://www.thingiverse.com/thing:360108) especially for the simplicity and low cost of parts involved.So I kept only the kinematics geometry and redesign all parts including the gripper   23/09/15updated instruction and round ramp stl (R01), added ball stlpreliminary tests videohttps://www.youtube.com/watch?v=x9C_3WHr1G0https://www.youtube.com/watch?v=0OFL6MxbPIM  25/09/15updated gripper r01 files04/10/15added instructables link in instruction

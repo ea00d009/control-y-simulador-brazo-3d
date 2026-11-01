@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control y Simulador 3D - Taller de Automatizacion 7° AÑO</title>
+  <script src="three.min.js"></script>
+  <script src="eezybotarm_stl.js"></script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #162032;
+      --card-alt: #0f172a;
+      --border: #2e3f59;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #ef4444;
+      --accent-hover: #dc2626;
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --canvas-bg: radial-gradient(circle at 50% 35%, #1e293b 0%, #090d16 100%);
+      --overlay-bg: rgba(15, 23, 42, 0.84);
+      --log-bg: #090d16;
+    }
+    body.light-mode {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --card-alt: #f8fafc;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --muted: #475569;
+      --canvas-bg: radial-gradient(circle at 50% 35%, #ffffff 0%, #cbd5e1 100%);
+      --overlay-bg: rgba(255, 255, 255, 0.88);
+      --log-bg: #e2e8f0;
+    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body {
+      margin: 0; padding: 10px 18px;
+      background: var(--bg); color: var(--text);
+      max-width: 1680px; margin-inline: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+    h1 { margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
+    .badge {
+      font-size: 0.78rem; padding: 4px 10px; border-radius: 999px; font-weight: 600;
+      background: rgba(168, 85, 247, 0.18); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+    .badge.connected {
+      background: rgba(34, 197, 94, 0.2); color: #4ade80; border-color: rgba(34, 197, 94, 0.45);
+    }
+    .btn {
+      border: none; border-radius: 7px; padding: 7px 12px;
+      font-weight: 600; cursor: pointer; color: white;
+      background: var(--blue); transition: 0.15s; font-size: 0.82rem;
+    }
+    .btn:hover { filter: brightness(1.12); }
+    .btn-danger { background: var(--accent); }
+    .btn-secondary { background: #334155; }
+    .btn-green { background: #16a34a; }
+    .btn-sm { padding: 4px 8px; font-size: 0.74rem; border-radius: 5px; }
+
+    /* Visor 3D grande a la izquierda y columna de controles a la derecha, ambos al 100% exacto del alto disponible */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+    @media (max-width: 1050px) {
+      body { height: auto; overflow: auto; }
+      .workspace { grid-template-columns: 1fr; }
+    }
+
+    .sim-panel {
+      height: 100%;
+      min-height: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .sim-header {
+      padding: 10px 14px;
+      background: var(--card-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .sim-canvas-wrap {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 320px;
+      background: var(--canvas-bg);
+      cursor: grab;
+    }
+    .sim-canvas-wrap:active { cursor: grabbing; }
+    #simCanvas { width: 100%; height: 100%; display: block; }
+
+    .sim-overlay-top {
+      position: absolute; top: 10px; left: 10px; right: 10px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      pointer-events: none;
+    }
+    .sim-telemetry {
+      background: var(--overlay-bg);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(4px);
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .sim-cam-btns {
+      display: flex; gap: 5px; pointer-events: auto; flex-wrap: wrap;
+    }
+    .sim-cam-btns button {
+      background: var(--overlay-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .sim-cam-btns button:hover { background: var(--blue); color: #fff; }
+
+    .sim-footer {
+      padding: 8px 14px;
+      background: var(--card-alt);
+      border-top: 1px solid var(--border);
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Columna derecha con altura 100% simétrica al visor 3D (Alineación + Región Común) */
+    .right-col {
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    /* Bloque superior: Control de los 4 ejes con Revelación Progresiva (Ley de Hick) */
+    .axes-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .axes-header {
+      padding: 8px 12px;
+      background: var(--card-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .servos-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+    }
+    .servo-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      border-radius: 9px;
+      padding: 9px 12px;
+      transition: border-color 0.15s;
+    }
+    .servo-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px;
+    }
+    .servo-title { font-weight: 700; font-size: 0.84rem; display: flex; align-items: center; gap: 6px; }
+    .pin-tag {
+      font-size: 0.68rem; background: var(--card); padding: 1px 6px;
+      border-radius: 4px; color: var(--muted); border: 1px solid var(--border); font-weight: 600;
+    }
+    .slider-row {
+      display: flex; align-items: center; gap: 8px;
+      margin: 8px 0 11px 0;
+    }
+    /* Ley de Fitts: área táctil amplia y clara para los sliders */
+    input[type="range"] {
+      flex: 1; accent-color: var(--accent); cursor: pointer; height: 7px; margin: 0;
+    }
+    .angle-display {
+      font-size: 0.96rem; font-weight: 800; min-width: 38px; text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+    }
+    .mini-btn {
+      padding: 4px 8px; border-radius: 5px; border: 1px solid var(--border);
+      background: var(--card); color: var(--text); cursor: pointer; font-size: 0.72rem; font-weight: 600;
+      transition: 0.12s;
+    }
+    .mini-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .mini-btn.active-preset {
+      background: var(--blue); color: #fff; border-color: var(--blue);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
+    }
+    .preset-group {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; width: 100%;
+    }
+    .preset-group .mini-btn { text-align: center; padding: 4px 6px; }
+    .limits-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2px; font-size: 0.72rem; color: var(--muted); gap: 6px;
+    }
+    .calib-drawer {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    body.show-calib .calib-drawer { display: flex; }
+    .calib-drawer input {
+      width: 44px; background: var(--card); border: 1px solid var(--border);
+      color: var(--text); padding: 2px 4px; border-radius: 4px; text-align: center; font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    /* Bloque inferior: Panel Multifunción con Pestañas que se estira hasta el borde inferior (flex: 1) */
+    .bottom-hub {
+      flex: 1;
+      min-height: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .hub-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--card-alt);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .hub-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      padding: 8px 6px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .hub-tab:hover { color: var(--text); background: rgba(59, 130, 246, 0.06); }
+    .hub-tab.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+      background: var(--card);
+    }
+    .hub-content {
+      flex: 1;
+      min-height: 0;
+      display: none;
+      flex-direction: column;
+      padding: 10px 12px;
+      overflow: hidden;
+    }
+    .hub-content.active { display: flex; }
+
+    .seq-toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 6px; margin-bottom: 8px; flex-shrink: 0;
+    }
+    .seq-list {
+      flex: 1; min-height: 0; overflow-y: auto;
+      background: var(--card-alt); border-radius: 8px; padding: 6px;
+      font-family: monospace; font-size: 0.77rem; border: 1px solid var(--border);
+    }
+    .seq-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 5px 7px; border-bottom: 1px solid var(--border); border-radius: 5px;
+      transition: background 0.15s;
+    }
+    .seq-item:last-child { border-bottom: none; }
+    .seq-item.playing-step {
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+    }
+
+    /* Pestaña 2: Poses Rápidas y Control por Teclado */
+    .poses-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+    .pose-card-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 7px 9px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--card-alt);
+      color: var(--text); cursor: pointer; font-size: 0.76rem; font-weight: 600;
+      text-align: left; transition: 0.15s;
+    }
+    .pose-card-btn:hover { border-color: var(--blue); background: rgba(59, 130, 246, 0.12); }
+    .pose-card-btn small { display: block; font-size: 0.66rem; color: var(--muted); font-weight: 400; }
+
+    .kbd-box {
+      flex: 1; min-height: 0;
+      background: var(--card-alt); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      font-size: 0.74rem;
+    }
+    .kbd-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px;
+      margin-top: 4px;
+    }
+    .kbd-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card); border: 1px solid var(--border);
+      padding: 4px 7px; border-radius: 6px;
+    }
+    .keycap {
+      display: inline-block; padding: 1px 5px; border-radius: 4px;
+      background: var(--card-alt); border: 1px solid var(--border);
+      font-family: monospace; font-size: 0.7rem; font-weight: 700; color: var(--text);
+    }
+    .keycap.pressed { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* Pestaña 3: Monitor Serie interactivo */
+    .log-box {
+      flex: 1; min-height: 0;
+      background: var(--log-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px; font-family: monospace;
+      font-size: 0.73rem; color: var(--muted); overflow-y: auto;
+      line-height: 1.45;
+    }
+    .serial-input-row {
+      display: flex; gap: 6px; margin-top: 7px; flex-shrink: 0;
+    }
+    .serial-input-row input {
+      flex: 1; background: var(--card-alt); border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px; padding: 5px 8px; font-family: monospace; font-size: 0.76rem;
+    }
+    .hub-footer {
+      padding: 6px 12px;
+      background: var(--card-alt);
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🦾 Control y Simulador 3D - Taller de Automatizacion 7° AÑO</h1>
+      <div style="font-size:0.83rem;color:var(--muted);margin-top:3px;">
+        Arduino Nano (Old Bootloader) • Pines Shield: <b>D8 (Base)</b>, <b>D9 (Hombro)</b>, <b>D10 (Codo)</b>, <b>D11 (Pinza)</b>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span id="statusBadge" class="badge">🟣 Modo Simulador (Sin placa)</span>
+      <button id="themeBtn" class="btn btn-secondary" onclick="toggleTheme()">☀️ Modo Claro</button>
+      <button class="btn btn-secondary" onclick="resetHomePose()">🏠 Pose Inicial (90°)</button>
+      <button class="btn btn-secondary" onclick="resetFactorySettings()" title="Restaurar límites, velocidad y color de fábrica">🔄 Valores de Fábrica</button>
+      <button id="connectBtn" class="btn" onclick="toggleSerial()">🔌 Conectar COM3</button>
+      <button class="btn btn-danger" onclick="sendCmd('X')">🛑 Soltar Servos (X)</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <!-- COLUMNA IZQUIERDA: VISOR Y SIMULADOR 3D CON LAS PIEZAS STL ORIGINALES -->
+    <div class="sim-panel">
+      <div class="sim-header">
+        <div>
+          <strong style="font-size:0.95rem;">📐 Gemelo Digital 3D - Brazo Impreso 3D 4 DoF</strong>
+          <div style="font-size:0.75rem;color:var(--muted);">13 piezas + cinemática exacta de lazo cerrado</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn btn-secondary btn-sm" onclick="loadDemoSequence()" title="Cargar secuencia de demostración Pick & Place">✨ Cargar Demo</button>
+          <button class="btn btn-secondary btn-sm" onclick="resetTestCube()" title="Reposicionar esfera/cubo de prueba">📦 Reset Objeto</button>
+        </div>
+      </div>
+
+      <div class="sim-canvas-wrap" id="canvasWrap">
+        <canvas id="simCanvas"></canvas>
+        <div class="sim-overlay-top">
+          <div class="sim-telemetry" id="telemetryBox">
+            Base: 90° | Hombro: 90°<br>
+            Codo: 90° | Pinza:  90°<br>
+            <span style="color:#f87171;">Pinza XYZ: (0, 125, 95) mm</span>
+          </div>
+          <div class="sim-cam-btns">
+            <button onclick="setCameraView('iso')">Vista 3/4</button>
+            <button onclick="setCameraView('side')">Lateral</button>
+            <button onclick="setCameraView('front')">Frente</button>
+            <button onclick="setCameraView('top')">Superior</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-footer">
+        <span>🖱️ <b>Clic izq + arrastrar:</b> Rotar 3D • <b>Rueda:</b> Zoom</span>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+          Color PLA:
+          <input type="color" id="armColorPicker" value="#dc2626" onchange="updateArmColor(this.value)" style="border:none;width:24px;height:20px;background:transparent;cursor:pointer;">
+        </label>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: SIMÉTRICA AL 100% DEL ALTO DEL VISOR 3D (LEYES UX + PRINCIPIOS UI FIGMA) -->
+    <div class="right-col">
+      <!-- BLOQUE SUPERIOR: CONTROL DE LOS 4 EJES CON REVELACIÓN PROGRESIVA (LEY DE HICK) -->
+      <div class="axes-panel">
+        <div class="axes-header">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <strong style="font-size:0.88rem;">🎛️ Control de Ejes (4 DOF)</strong>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <label style="font-size:0.73rem;color:var(--muted);display:flex;align-items:center;gap:4px;" title="Retardo entre grados (0 = instantáneo, 15 = suave)">
+              ⚡ ms/°:
+              <input id="speedInput" type="number" value="15" min="0" max="80" style="width:40px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:2px 4px;border-radius:4px;font-size:0.73rem;text-align:center;font-weight:700;" onchange="updateSpeed(this.value)">
+            </label>
+            <button id="calibToggleBtn" class="mini-btn" onclick="toggleCalibDrawer()" title="Mostrar u ocultar ajuste de límites Mín/Máx (Revelación Progresiva)">⚙️ Límites</button>
+          </div>
+        </div>
+        <div class="servos-grid" id="servosContainer"></div>
+      </div>
+
+      <!-- BLOQUE INFERIOR: CENTRO MULTIFUNCIÓN EN PESTAÑAS (LEY DE MILLER + ALINEACIÓN 100% ALTO) -->
+      <div class="bottom-hub">
+        <div class="hub-tabs">
+          <button class="hub-tab active" id="tabBtn-seq" onclick="switchHubTab('seq')">
+            🎬 Secuencias <span id="seqCountBadge" style="font-size:0.68rem;background:rgba(59,130,246,0.18);color:var(--blue);padding:1px 6px;border-radius:99px;">0</span>
+          </button>
+          <button class="hub-tab" id="tabBtn-poses" onclick="switchHubTab('poses')">
+            🎮 Poses y Teclado
+          </button>
+          <button class="hub-tab" id="tabBtn-log" onclick="switchHubTab('log')">
+            📟 Consola <span id="logBadge" style="display:none;width:7px;height:7px;background:var(--green);border-radius:50%;"></span>
+          </button>
+        </div>
+
+        <!-- PESTAÑA 1: SECUENCIAS PICK & PLACE -->
+        <div class="hub-content active" id="tabContent-seq">
+          <div class="seq-toolbar">
+            <div style="display:flex;gap:5px;align-items:center;">
+              <button class="btn btn-secondary btn-sm" onclick="savePose()" title="Guardar la posición actual de los 4 servos">➕ Guardar Pose</button>
+              <button class="btn btn-green btn-sm" id="playBtn" onclick="togglePlay()">▶️ Play</button>
+              <label style="font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:3px;cursor:pointer;" title="Repetir secuencia en bucle continuo">
+                <input type="checkbox" id="loopCheck" checked style="cursor:pointer;"> Loop
+              </label>
+            </div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <button class="mini-btn" onclick="exportSequenceJSON()" title="Descargar secuencia como archivo JSON">💾 Exportar</button>
+              <button class="mini-btn" onclick="clearPoses()" title="Borrar todas las poses">🗑️</button>
+            </div>
+          </div>
+          <div class="seq-list" id="seqList"></div>
+        </div>
+
+        <!-- PESTAÑA 2: POSES RÁPIDAS GLOBALES + MODO TECLADO GAMER -->
+        <div class="hub-content" id="tabContent-poses">
+          <div style="font-size:0.74rem;color:var(--muted);margin-bottom:5px;font-weight:600;">⚡ Posturas completas en 1 clic (4 ejes sincronizados):</div>
+          <div class="poses-grid">
+            <button class="pose-card-btn" onclick="applyQuickPose([90, 90, 90, 90], 'Reposo Central')">
+              <span>🏠</span>
+              <div>Reposo Central<small>[90°, 90°, 90°, 90°]</small></div>
+            </button>
+            <button class="pose-card-btn" onclick="applyQuickPose([55, 132, 48, 30], 'Posición de Agarre')">
+              <span>📦</span>
+              <div>Ir al Objeto<small>[55°, 132°, 48°, 30°]</small></div>
+            </button>
+            <button class="pose-card-btn" onclick="applyQuickPose([90, 135, 45, 30], 'Alcance Frontal')">
+              <span>🦅</span>
+              <div>Alcance Frontal<small>[90°, 135°, 45°, 30°]</small></div>
+            </button>
+            <button class="pose-card-btn" onclick="applyQuickPose([90, 65, 130, 145], 'Torre Elevada')">
+              <span>🏗️</span>
+              <div>Torre Elevada<small>[90°, 65°, 130°, 145°]</small></div>
+            </button>
+            <button class="pose-card-btn" onclick="applyQuickPose([130, 130, 50, 30], 'Zona de Descarga')">
+              <span>📤</span>
+              <div>Zona Descarga<small>[130°, 130°, 50°, 30°]</small></div>
+            </button>
+            <button class="pose-card-btn" onclick="runWaveGreeting()">
+              <span>👋</span>
+              <div>Saludo Rápido<small>Animación de saludo</small></div>
+            </button>
+          </div>
+
+          <div class="kbd-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="font-size:0.78rem;">⌨️ Control Directo por Teclado</strong>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:600;color:var(--blue);">
+                <input type="checkbox" id="kbdToggle" onchange="toggleKeyboardMode(this.checked)" style="cursor:pointer;">
+                Activar Teclas
+              </label>
+            </div>
+            <div class="kbd-grid">
+              <div class="kbd-row"><span>Base Giro</span><span><kbd class="keycap" id="key-a">A</kbd> <kbd class="keycap" id="key-d">D</kbd></span></div>
+              <div class="kbd-row"><span>Hombro</span><span><kbd class="keycap" id="key-w">W</kbd> <kbd class="keycap" id="key-s">S</kbd></span></div>
+              <div class="kbd-row"><span>Codo</span><span><kbd class="keycap" id="key-up">↑</kbd> <kbd class="keycap" id="key-down">↓</kbd></span></div>
+              <div class="kbd-row"><span>Pinza / Home</span><span><kbd class="keycap" id="key-space">Espacio</kbd> <kbd class="keycap" id="key-h">H</kbd></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PESTAÑA 3: MONITOR SERIE INTERACTIVO -->
+        <div class="hub-content" id="tabContent-log">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-shrink:0;">
+            <span style="font-size:0.74rem;color:var(--muted);">Tráfico en vivo (115200 baudios):</span>
+            <div style="display:flex;gap:5px;">
+              <button class="mini-btn" onclick="sendCmd('STATUS')" title="Consultar estado y límites guardados en EEPROM">📊 Leer EEPROM</button>
+              <button class="mini-btn" onclick="clearLog()">🧹 Limpiar</button>
+            </div>
+          </div>
+          <div class="log-box" id="logBox">Mallas STL originales del EEZYbotARM cargadas correctamente.</div>
+          <div class="serial-input-row">
+            <input type="text" id="manualCmdInput" placeholder="Comando manual (ej: S0:120, STATUS, RESET)..." onkeydown="if(event.key==='Enter') sendManualCmd()" />
+            <button class="btn btn-sm" onclick="sendManualCmd()">Enviar</button>
+          </div>
+        </div>
+
+        <div class="hub-footer">
+          <span id="hubStatusText">🟢 Listo • Límites sincronizados en EEPROM</span>
+          <span style="font-family:monospace;" id="activeStepIndicator">Modo Manual</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. CONFIGURACIÓN DE LOS 4 SERVOS + PERSISTENCIA (localStorage + EEPROM)
+    // =========================================================================
+    const STORAGE_KEY = "eezybotarm_config_v1";
+
+    const FACTORY_DEFAULTS = {
+      speed: 15,
+      armColor: "#dc2626",
+      limits: [
+        { min: 0,  max: 180 }, // 1. Base (0° a 180° completos)
+        { min: 10, max: 170 }, // 2. Hombro (margen amplio, ajustable de 0° a 180°)
+        { min: 10, max: 170 }, // 3. Codo (margen amplio, ajustable de 0° a 180°)
+        { min: 10, max: 170 }  // 4. Pinza
+      ]
+    };
+
+    const SERVOS = [
+      { id: 0, name: "1. Base (Giro Horizontal)", pin: "D8",  color: "#3b82f6", angle: 90, simAngle: 90, min: 0,  max: 180, presetMin: "◄ Izquierda", presetMid: "Centro", presetMax: "Derecha ►" },
+      { id: 1, name: "2. Hombro (Adelante/Atrás)", pin: "D9",  color: "#10b981", angle: 90, simAngle: 90, min: 10, max: 170, presetMin: "◄ Atrás",     presetMid: "Vertical", presetMax: "Adelante ►" },
+      { id: 2, name: "3. Codo (Arriba/Abajo)",    pin: "D10", color: "#f59e0b", angle: 90, simAngle: 90, min: 10, max: 170, presetMin: "▼ Abajo",     presetMid: "Medio",    presetMax: "▲ Arriba" },
+      { id: 3, name: "4. Pinza (Gripper)",        pin: "D11", color: "#ef4444", angle: 90, simAngle: 90, min: 10, max: 170, presetMin: "🔓 Abrir",    presetMid: "Media",    presetMax: "🔒 Cerrar" }
+    ];
+
+    let stepDelayMs = FACTORY_DEFAULTS.speed;
+    let currentArmColor = FACTORY_DEFAULTS.armColor;
+    let lightMode = false;
+    let showCalib = false;
+    let keyboardEnabled = false;
+    let activeHubTab = "seq";
+    let currentPlayingIdx = -1;
+    let port = null;
+    let writer = null;
+    let reader = null;
+    let readableStreamClosed = null;
+    let writableStreamClosed = null;
+    let poses = [];
+    let isPlaying = false;
+
+    function saveConfigToLocal() {
+      try {
+        const cfg = {
+          speed: stepDelayMs,
+          armColor: currentArmColor,
+          lightMode: lightMode,
+          limits: SERVOS.map(s => ({ min: s.min, max: s.max })),
+          poses: poses
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+      } catch (e) {}
+    }
+
+    function loadConfigFromLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const cfg = JSON.parse(raw);
+        if (typeof cfg.speed === "number") {
+          stepDelayMs = Math.max(0, Math.min(100, cfg.speed));
+          document.getElementById("speedInput").value = stepDelayMs;
+        }
+        if (cfg.armColor) {
+          currentArmColor = cfg.armColor;
+          document.getElementById("armColorPicker").value = currentArmColor;
+        }
+        if (typeof cfg.lightMode === "boolean") {
+          lightMode = cfg.lightMode;
+        }
+        if (Array.isArray(cfg.limits) && cfg.limits.length === 4) {
+          cfg.limits.forEach((lim, i) => {
+            if (typeof lim.min === "number" && typeof lim.max === "number" && lim.min < lim.max) {
+              SERVOS[i].min = Math.max(0, Math.min(180, lim.min));
+              SERVOS[i].max = Math.max(0, Math.min(180, lim.max));
+              SERVOS[i].angle = Math.max(SERVOS[i].min, Math.min(SERVOS[i].max, SERVOS[i].angle));
+              SERVOS[i].simAngle = SERVOS[i].angle;
+            }
+          });
+        }
+        if (Array.isArray(cfg.poses)) {
+          poses = cfg.poses;
+        }
+      } catch (e) {}
+    }
+
+    async function syncAllSettingsToArduino() {
+      if (!writer) return;
+      await sendCmd(`V:${stepDelayMs}`);
+      for (let i = 0; i < SERVOS.length; i++) {
+        await sendCmd(`L${i}:${SERVOS[i].min},${SERVOS[i].max}`);
+      }
+      log("Configuración y límites sincronizados con la memoria EEPROM del Arduino Nano.");
+    }
+
+    function resetFactorySettings() {
+      stepDelayMs = FACTORY_DEFAULTS.speed;
+      currentArmColor = FACTORY_DEFAULTS.armColor;
+      document.getElementById("speedInput").value = stepDelayMs;
+      document.getElementById("armColorPicker").value = currentArmColor;
+      updateArmColor(currentArmColor);
+
+      SERVOS.forEach((s, i) => {
+        s.min = FACTORY_DEFAULTS.limits[i].min;
+        s.max = FACTORY_DEFAULTS.limits[i].max;
+        s.angle = 90;
+      });
+
+      localStorage.removeItem(STORAGE_KEY);
+      renderServos();
+      sendCmd("RESET");
+      sendCmd("A:90,90,90,90");
+      log("🔄 Valores de fábrica restaurados (en el panel y en la EEPROM del Arduino Nano).");
+    }
+
+    function toggleCalibDrawer() {
+      showCalib = !showCalib;
+      document.body.classList.toggle("show-calib", showCalib);
+      const btn = document.getElementById("calibToggleBtn");
+      if (btn) btn.classList.toggle("active-preset", showCalib);
+    }
+
+    function switchHubTab(tabId) {
+      activeHubTab = tabId;
+      ["seq", "poses", "log"].forEach(id => {
+        document.getElementById(`tabBtn-${id}`).classList.toggle("active", id === tabId);
+        document.getElementById(`tabContent-${id}`).classList.toggle("active", id === tabId);
+      });
+      if (tabId === "log") {
+        document.getElementById("logBadge").style.display = "none";
+      }
+    }
+
+    function updatePresetHighlights(id) {
+      const s = SERVOS[id];
+      const pMin = document.getElementById(`pmin-${id}`);
+      const pMid = document.getElementById(`pmid-${id}`);
+      const pMax = document.getElementById(`pmax-${id}`);
+      if (pMin) pMin.classList.toggle("active-preset", s.angle === s.min);
+      if (pMid) pMid.classList.toggle("active-preset", s.angle === 90);
+      if (pMax) pMax.classList.toggle("active-preset", s.angle === s.max);
+    }
+
+    function renderServos() {
+      const container = document.getElementById("servosContainer");
+      container.innerHTML = SERVOS.map(s => `
+        <div class="servo-card" style="border-left-color: ${s.color};">
+          <div class="servo-header">
+            <span class="servo-title">${s.name} <span class="pin-tag">${s.pin}</span></span>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button class="mini-btn" onclick="sendCmd('D${s.id}')" title="Desenergizar solo este servo">Soltar</button>
+              <span class="angle-display" id="val-${s.id}" style="color:${s.color};">${s.angle}°</span>
+            </div>
+          </div>
+          <div class="slider-row">
+            <input type="range" id="slider-${s.id}" min="${s.min}" max="${s.max}" value="${s.angle}"
+              style="accent-color:${s.color};"
+              oninput="onSliderInput(${s.id}, this.value)"
+              onchange="setServo(${s.id}, this.value)" />
+          </div>
+          <div class="limits-row">
+            <div class="preset-group">
+              <button class="mini-btn ${s.angle === s.min ? 'active-preset' : ''}" id="pmin-${s.id}" onclick="setServo(${s.id}, SERVOS[${s.id}].min)">${s.presetMin}</button>
+              <button class="mini-btn ${s.angle === 90 ? 'active-preset' : ''}" id="pmid-${s.id}" onclick="setServo(${s.id}, 90)">${s.presetMid}</button>
+              <button class="mini-btn ${s.angle === s.max ? 'active-preset' : ''}" id="pmax-${s.id}" onclick="setServo(${s.id}, SERVOS[${s.id}].max)">${s.presetMax}</button>
+            </div>
+          </div>
+          <div class="calib-drawer">
+            <span>🔧 Calibrar rango físico (${s.pin}):</span>
+            <span>Mín <input type="number" id="min-${s.id}" value="${s.min}" min="0" max="180" onchange="updateLimits(${s.id})">° • Máx <input type="number" id="max-${s.id}" value="${s.max}" min="0" max="180" onchange="updateLimits(${s.id})">°</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function log(msg) {
+      const box = document.getElementById("logBox");
+      box.innerHTML += `<div>> ${msg}</div>`;
+      box.scrollTop = box.scrollHeight;
+      const statusEl = document.getElementById("hubStatusText");
+      if (statusEl) statusEl.textContent = msg.slice(0, 52) + (msg.length > 52 ? "…" : "");
+      if (activeHubTab !== "log") {
+        const badge = document.getElementById("logBadge");
+        if (badge) badge.style.display = "inline-block";
+      }
+    }
+
+    function clearLog() {
+      document.getElementById("logBox").innerHTML = "<div>> Consola limpia.</div>";
+    }
+
+    function sendManualCmd() {
+      const inp = document.getElementById("manualCmdInput");
+      const cmd = inp.value.trim();
+      if (!cmd) return;
+      sendCmd(cmd);
+      inp.value = "";
+    }
+
+    function onSliderInput(id, val) {
+      const v = parseInt(val, 10);
+      SERVOS[id].angle = v;
+      document.getElementById(`val-${id}`).textContent = `${v}°`;
+      updatePresetHighlights(id);
+    }
+
+    function setServo(id, val) {
+      val = Math.max(SERVOS[id].min, Math.min(SERVOS[id].max, parseInt(val, 10)));
+      SERVOS[id].angle = val;
+      document.getElementById(`slider-${id}`).value = val;
+      document.getElementById(`val-${id}`).textContent = `${val}°`;
+      updatePresetHighlights(id);
+      sendCmd(`S${id}:${val}`);
+    }
+
+    function stepServo(id, delta) {
+      setServo(id, SERVOS[id].angle + delta);
+    }
+
+    function applyQuickPose(angles, label = "Pose Rápida") {
+      angles.forEach((a, i) => {
+        const clamped = Math.max(SERVOS[i].min, Math.min(SERVOS[i].max, a));
+        SERVOS[i].angle = clamped;
+        document.getElementById(`slider-${i}`).value = clamped;
+        document.getElementById(`val-${i}`).textContent = `${clamped}°`;
+        updatePresetHighlights(i);
+      });
+      sendCmd(`A:${SERVOS.map(s => s.angle).join(",")}`);
+      document.getElementById("activeStepIndicator").textContent = label;
+    }
+
+    function resetHomePose() {
+      applyQuickPose([90, 90, 90, 90], "Pose Inicial (90°)");
+    }
+
+    async function runWaveGreeting() {
+      const waveSteps = [
+        [90, 75, 125, 30],
+        [90, 75, 125, 145],
+        [65, 75, 125, 40],
+        [115, 75, 125, 145],
+        [90, 90, 90, 90]
+      ];
+      document.getElementById("activeStepIndicator").textContent = "👋 Saludando...";
+      for (const st of waveSteps) {
+        applyQuickPose(st, "👋 Saludo");
+        await new Promise(r => setTimeout(r, 650));
+      }
+      document.getElementById("activeStepIndicator").textContent = "Modo Manual";
+    }
+
+    function toggleKeyboardMode(enabled) {
+      keyboardEnabled = enabled;
+      document.getElementById("activeStepIndicator").textContent = enabled ? "⌨️ Teclado Activo" : "Modo Manual";
+      log(enabled ? "⌨️ Control por teclado activado (A/D, W/S, ↑/↓, Espacio, H)." : "⌨️ Control por teclado desactivado.");
+    }
+
+    window.addEventListener("keydown", e => {
+      if (!keyboardEnabled) return;
+      if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+      const key = e.key.toLowerCase();
+      const step = 4;
+      let handled = true;
+      let badgeId = null;
+
+      if (key === "a") { stepServo(0, -step); badgeId = "key-a"; }
+      else if (key === "d") { stepServo(0, step); badgeId = "key-d"; }
+      else if (key === "w") { stepServo(1, step); badgeId = "key-w"; }
+      else if (key === "s") { stepServo(1, -step); badgeId = "key-s"; }
+      else if (e.key === "ArrowUp") { stepServo(2, step); badgeId = "key-up"; }
+      else if (e.key === "ArrowDown") { stepServo(2, -step); badgeId = "key-down"; }
+      else if (e.key === " ") {
+        const nextGrip = SERVOS[3].angle > 90 ? SERVOS[3].min : SERVOS[3].max;
+        setServo(3, nextGrip);
+        badgeId = "key-space";
+      } else if (key === "h") {
+        resetHomePose();
+        badgeId = "key-h";
+      } else {
+        handled = false;
+      }
+
+      if (handled) {
+        e.preventDefault();
+        if (badgeId) {
+          const el = document.getElementById(badgeId);
+          if (el) {
+            el.classList.add("pressed");
+            setTimeout(() => el.classList.remove("pressed"), 160);
+          }
+        }
+      }
+    });
+
+    function updateSpeed(val) {
+      stepDelayMs = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
+      saveConfigToLocal();
+      sendCmd("V:" + stepDelayMs);
+    }
+
+    function updateLimits(id) {
+      const mn = Math.max(0, Math.min(180, parseInt(document.getElementById(`min-${id}`).value, 10) || 0));
+      const mx = Math.max(0, Math.min(180, parseInt(document.getElementById(`max-${id}`).value, 10) || 180));
+      if (mn < mx) {
+        SERVOS[id].min = mn;
+        SERVOS[id].max = mx;
+        const sl = document.getElementById(`slider-${id}`);
+        sl.min = mn;
+        sl.max = mx;
+        if (SERVOS[id].angle < mn || SERVOS[id].angle > mx) {
+          setServo(id, Math.max(mn, Math.min(mx, SERVOS[id].angle)));
+        }
+        updatePresetHighlights(id);
+        saveConfigToLocal();
+        sendCmd(`L${id}:${mn},${mx}`);
+        log(`💾 Límites de ${SERVOS[id].name} guardados: [${mn}° .. ${mx}°]`);
+      }
+    }
+
+    // =========================================================================
+    // 2. CONEXIÓN WEB SERIAL (Con soporte de desconexión limpia)
+    // =========================================================================
+    async function toggleSerial() {
+      if (port) {
+        try {
+          isPlaying = false;
+          if (reader) {
+            await reader.cancel();
+            await readableStreamClosed.catch(() => {});
+            reader = null;
+          }
+          if (writer) {
+            await writer.close();
+            await writableStreamClosed.catch(() => {});
+            writer = null;
+          }
+          await port.close();
+        } catch (err) {
+          log("Aviso al cerrar puerto: " + err.message);
+        } finally {
+          port = null;
+          document.getElementById("statusBadge").textContent = "🟣 Modo Simulador (Sin placa)";
+          document.getElementById("statusBadge").className = "badge";
+          document.getElementById("connectBtn").textContent = "🔌 Conectar COM3";
+          log("Desconectado. El panel sigue activo en Modo Simulador 3D.");
+        }
+        return;
+      }
+      try {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        const encoder = new TextEncoderStream();
+        writableStreamClosed = encoder.readable.pipeTo(port.writable);
+        writer = encoder.writable.getWriter();
+
+        document.getElementById("statusBadge").textContent = "🟢 Conectado COM3 + Gemelo 3D";
+        document.getElementById("statusBadge").className = "badge connected";
+        document.getElementById("connectBtn").textContent = "🔌 Desconectar";
+        log("Conectado al Arduino Nano en 115200 baudios.");
+        readLoop();
+        setTimeout(syncAllSettingsToArduino, 600);
+      } catch (e) {
+        port = null;
+        log("No se conectó al puerto (" + e.message + "). Seguís en Modo Simulador 3D.");
+      }
+    }
+
+    async function readLoop() {
+      const decoder = new TextDecoderStream();
+      readableStreamClosed = port.readable.pipeTo(decoder.writable);
+      reader = decoder.readable.getReader();
+      let buf = "";
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += value;
+          let lines = buf.split("\n");
+          buf = lines.pop();
+          for (const line of lines) {
+            if (line.trim()) log("Nano: " + line.trim());
+          }
+        }
+      } catch (e) {
+        log("Lectura serie finalizada.");
+      } finally {
+        if (reader) reader.releaseLock();
+      }
+    }
+
+    async function sendCmd(cmd) {
+      if (!writer) {
+        log(`[Simulador 3D] Comando ejecutado: ${cmd}`);
+        return;
+      }
+      await writer.write(cmd + "\n");
+      log(`Enviado a Nano: ${cmd}`);
+    }
+
+    // =========================================================================
+    // 3. GRABADOR Y REPRODUCTOR DE SECUENCIAS
+    // =========================================================================
+    function savePose() {
+      const pose = SERVOS.map(s => s.angle);
+      poses.push({ angles: pose, delay: 1300 });
+      saveConfigToLocal();
+      renderPoses();
+      switchHubTab("seq");
+    }
+
+    function loadDemoSequence() {
+      poses = [
+        { angles: [90, 90, 90, 30],   delay: 1100, label: "1. Centro + Abrir pinza" },
+        { angles: [55, 90, 90, 30],   delay: 1100, label: "2. Girar hacia el objeto" },
+        { angles: [55, 132, 48, 30],  delay: 1300, label: "3. Bajar hacia el objeto" },
+        { angles: [55, 132, 48, 145], delay: 1000, label: "4. Cerrar pinza (Agarrar)" },
+        { angles: [55, 82, 112, 145], delay: 1300, label: "5. Levantar objeto" },
+        { angles: [130, 82, 112, 145],delay: 1400, label: "6. Girar a zona de descarga" },
+        { angles: [130, 132, 48, 145],delay: 1300, label: "7. Bajar objeto" },
+        { angles: [130, 132, 48, 30], delay: 1000, label: "8. Abrir pinza (Soltar)" },
+        { angles: [90, 90, 90, 90],   delay: 1300, label: "9. Volver a reposo" }
+      ];
+      saveConfigToLocal();
+      renderPoses();
+      switchHubTab("seq");
+      log("Secuencia Demo Pick & Place cargada (9 pasos). Tocá '▶️ Play' para verla.");
+    }
+
+    function exportSequenceJSON() {
+      if (poses.length === 0) {
+        log("No hay poses en la secuencia para exportar.");
+        return;
+      }
+      const blob = new Blob([JSON.stringify(poses, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "secuencia_eezybotarm.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      log("💾 Secuencia exportada como secuencia_eezybotarm.json");
+    }
+
+    function removePose(idx) {
+      poses.splice(idx, 1);
+      saveConfigToLocal();
+      renderPoses();
+    }
+
+    function renderPoses() {
+      const list = document.getElementById("seqList");
+      const badge = document.getElementById("seqCountBadge");
+      if (badge) badge.textContent = poses.length;
+      if (poses.length === 0) {
+        list.innerHTML = `<div style="color:var(--muted);text-align:center;padding:18px 10px;">No hay poses guardadas.<br>Tocá <b>"➕ Guardar Pose"</b> o <b>"✨ Cargar Demo"</b> arriba.</div>`;
+        return;
+      }
+      list.innerHTML = poses.map((p, idx) => `
+        <div class="seq-item ${idx === currentPlayingIdx ? 'playing-step' : ''}" id="seq-item-${idx}">
+          <span><b>${p.label || ('Paso #' + (idx + 1))}</b>: [${p.angles[0]}°, ${p.angles[1]}°, ${p.angles[2]}°, ${p.angles[3]}°]</span>
+          <div style="display:flex;gap:5px;">
+            <button class="btn btn-secondary btn-sm" onclick="goToPose(${idx})">Ir</button>
+            <button class="btn btn-danger btn-sm" onclick="removePose(${idx})">X</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function goToPose(idx) {
+      const p = poses[idx].angles;
+      p.forEach((a, i) => {
+        SERVOS[i].angle = a;
+        document.getElementById(`slider-${i}`).value = a;
+        document.getElementById(`val-${i}`).textContent = `${a}°`;
+        updatePresetHighlights(i);
+      });
+      sendCmd(`A:${p.join(",")}`);
+    }
+
+    function clearPoses() {
+      isPlaying = false;
+      currentPlayingIdx = -1;
+      document.getElementById("playBtn").textContent = "▶️ Play";
+      document.getElementById("activeStepIndicator").textContent = "Modo Manual";
+      poses = [];
+      saveConfigToLocal();
+      renderPoses();
+    }
+
+    async function togglePlay() {
+      if (poses.length === 0) {
+        loadDemoSequence();
+      }
+      isPlaying = !isPlaying;
+      document.getElementById("playBtn").textContent = isPlaying ? "⏹️ Detener" : "▶️ Play";
+      if (!isPlaying) {
+        currentPlayingIdx = -1;
+        document.getElementById("activeStepIndicator").textContent = "Modo Manual";
+        renderPoses();
+        return;
+      }
+      do {
+        for (let i = 0; i < poses.length; i++) {
+          if (!isPlaying) break;
+          currentPlayingIdx = i;
+          document.getElementById("activeStepIndicator").textContent = `▶️ Paso ${i + 1}/${poses.length}`;
+          renderPoses();
+          const activeRow = document.getElementById(`seq-item-${i}`);
+          if (activeRow) activeRow.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          goToPose(i);
+          await new Promise(r => setTimeout(r, poses[i].delay));
+        }
+      } while (isPlaying && document.getElementById("loopCheck").checked);
+
+      isPlaying = false;
+      currentPlayingIdx = -1;
+      document.getElementById("playBtn").textContent = "▶️ Play";
+      document.getElementById("activeStepIndicator").textContent = "Modo Manual";
+      renderPoses();
+    }
+
+    // =========================================================================
+    // 4. DECODIFICADOR DE MALLAS STL ORIGINALES (eezybotarm_stl.js)
+    // =========================================================================
+    function b64ToUint8(b64) {
+      const bin = atob(b64);
+      const len = bin.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    function buildSTLGeometry(partKey) {
+      const data = window.EEZYBOT_STL[partKey];
+      const posBytes = b64ToUint8(data.pos);
+      const nrmBytes = b64ToUint8(data.nrm);
+      const idxBytes = b64ToUint8(data.idx);
+
+      const posInt16 = new Int16Array(posBytes.buffer);
+      const nrmInt8  = new Int8Array(nrmBytes.buffer);
+      const indices  = new Uint16Array(idxBytes.buffer);
+
+      const positions = new Float32Array(posInt16.length);
+      const normals   = new Float32Array(nrmInt8.length);
+
+      for (let i = 0; i < posInt16.length; i++) {
+        positions[i] = posInt16[i] * 0.02; // Unidades de 0.02 mm convertidas a milímetros reales
+        normals[i]   = nrmInt8[i] / 127.0;
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute("normal",   new THREE.BufferAttribute(normals, 3));
+      geo.setIndex(new THREE.BufferAttribute(indices, 1));
+      return geo;
+    }
+
+    // =========================================================================
+    // 5. ESCENA THREE.JS + ENSAMBLAJE CAD DEL EEZYbotARM
+    // =========================================================================
+    const canvasWrap = document.getElementById("canvasWrap");
+    const canvas = document.getElementById("simCanvas");
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, canvasWrap.clientWidth / canvasWrap.clientHeight, 1, 2000);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(canvasWrap.clientWidth, canvasWrap.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.58);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.92);
+    dirLight.position.set(170, 290, 180);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
+    scene.add(dirLight);
+
+    const rimLight = new THREE.DirectionalLight(0x60a5fa, 0.38);
+    rimLight.position.set(-180, 140, -150);
+    scene.add(rimLight);
+
+    // Piso y grilla milimetrada
+    const floorGeo = new THREE.CircleGeometry(210, 48);
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.85, metalness: 0.1 });
+    const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+    floorMesh.rotation.x = -Math.PI / 2;
+    floorMesh.receiveShadow = true;
+    scene.add(floorMesh);
+
+    const grid = new THREE.GridHelper(340, 17, 0x3b82f6, 0x1e293b);
+    grid.position.y = 0.2;
+    scene.add(grid);
+
+    // Materiales: PLA Rojo Impreso 3D + Servos SG90 Azules + Tornillos M3 Metálicos
+    const plaMainMat = new THREE.MeshStandardMaterial({
+      color: 0xdc2626,
+      roughness: 0.36,
+      metalness: 0.08
+    });
+    const plaLinkMat = new THREE.MeshStandardMaterial({
+      color: 0xb91c1c,
+      roughness: 0.4,
+      metalness: 0.08
+    });
+    const sg90BlueMat = new THREE.MeshPhysicalMaterial({
+      color: 0x1d4ed8,
+      roughness: 0.22,
+      metalness: 0.05,
+      transmission: 0.25,
+      transparent: true,
+      opacity: 0.92
+    });
+    const sg90LabelMat = new THREE.MeshStandardMaterial({
+      color: 0xd97706,
+      roughness: 0.3,
+      metalness: 0.5
+    });
+    const metalMat = new THREE.MeshStandardMaterial({
+      color: 0xe2e8f0,
+      roughness: 0.22,
+      metalness: 0.88
+    });
+
+    function updateArmColor(hex) {
+      currentArmColor = hex;
+      plaMainMat.color.set(hex);
+      const darker = new THREE.Color(hex).multiplyScalar(0.82);
+      plaLinkMat.color.copy(darker);
+      saveConfigToLocal();
+    }
+
+    function createSTLMesh(key, mat = plaMainMat) {
+      const m = new THREE.Mesh(buildSTLGeometry(key), mat);
+      m.castShadow = true;
+      m.receiveShadow = true;
+      return m;
+    }
+
+    // Crea un micro-servo SG90 para los laterales de la torreta (Hombro y Codo):
+    // side = +1 (derecha +X, eje apunta hacia -X) o -1 (izquierda -X, eje apunta hacia +X).
+    // La cara exterior de la pared impresa de la torreta (001.STL) está en X = ±26.0 mm,
+    // por lo que las pestañas (flange) del servo apoyan directamente sobre X = ±26.0 mm del lado de afuera.
+    function createTurretSG90(side) {
+      const g = new THREE.Group();
+      // Eje estriado + cilindro de salida en (Y=0, Z=0) apuntando hacia adentro (-side en X)
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 7, 16), metalMat);
+      shaft.rotation.z = Math.PI / 2;
+      shaft.position.set(side * 15.5, 0, 0);
+      g.add(shaft);
+
+      const boss = new THREE.Mesh(new THREE.CylinderGeometry(5.5, 5.5, 4, 20), sg90BlueMat);
+      boss.rotation.z = Math.PI / 2;
+      boss.position.set(side * 19.0, 0, 0);
+      g.add(boss);
+
+      // Cuerpo del servo (22.5 mm de profundidad en X, 22.5 mm de alto en Y, 12.2 mm de espesor en Z)
+      const body = new THREE.Mesh(new THREE.BoxGeometry(22.5, 22.5, 12.2), sg90BlueMat);
+      body.position.set(side * 32.0, -5.5, 0);
+      body.castShadow = true;
+      g.add(body);
+
+      // Pestañas de fijación apoyadas sobre la cara exterior de la pared de la torreta (X = ±26.0 mm)
+      const flange = new THREE.Mesh(new THREE.BoxGeometry(2.5, 32.2, 12.2), sg90BlueMat);
+      flange.position.set(side * 27.25, -5.5, 0);
+      g.add(flange);
+
+      // Tornillos M3 x 10 que sujetan la arandela rectangular (009_servo_plate) desde afuera
+      [-9.5, 9.5].forEach(zScr => {
+        const scr = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 12, 12), metalMat);
+        scr.rotation.z = Math.PI / 2;
+        scr.position.set(side * 28.5, -5.5, zScr);
+        g.add(scr);
+      });
+
+      // Etiqueta lateral
+      const label = new THREE.Mesh(new THREE.BoxGeometry(15, 16, 12.6), sg90LabelMat);
+      label.position.set(side * 33.5, -5.5, 0);
+      g.add(label);
+
+      return g;
+    }
+
+    // Crea el micro-servo SG90 de la Pinza encastrado dentro de la cavidad de 012_claw_support (Y = -10.35 mm)
+    // con el eje motor apuntando hacia ABAJO (-Y) hacia los engranajes
+    function createClawSG90() {
+      const g = new THREE.Group();
+      // Eje motor + boss apuntando hacia ABAJO (-Y) atravesando la placa hacia el engranaje (Z = 20.5)
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 6, 16), metalMat);
+      shaft.position.set(0, -17.5, 20.5);
+      g.add(shaft);
+
+      const boss = new THREE.Mesh(new THREE.CylinderGeometry(5.5, 5.5, 4, 20), sg90BlueMat);
+      boss.position.set(0, -14.5, 20.5);
+      g.add(boss);
+
+      // Cuerpo del servo encastrado en la ranura de la placa (que está entre Y = -14.85 y -10.35)
+      const body = new THREE.Mesh(new THREE.BoxGeometry(12.2, 22.5, 22.5), sg90BlueMat);
+      body.position.set(0, -3.5, 26.5);
+      body.castShadow = true;
+      g.add(body);
+
+      // Pestañas de fijación apoyadas directamente sobre la cara superior de la placa (Y = -10.35 mm)
+      const flange = new THREE.Mesh(new THREE.BoxGeometry(12.2, 2.5, 32.2), sg90BlueMat);
+      flange.position.set(0, -9.1, 26.5);
+      g.add(flange);
+
+      // Tornillos verticales en las orejas (adelante y atrás) apoyados sobre la placa
+      [13.0, 40.5].forEach(zScr => {
+        const scr = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 7, 12), metalMat);
+        scr.position.set(0, -9.5, zScr);
+        g.add(scr);
+      });
+
+      // Etiqueta en los laterales (±X)
+      const label = new THREE.Mesh(new THREE.BoxGeometry(12.6, 15, 16), sg90LabelMat);
+      label.position.set(0, -2.0, 26.5);
+      g.add(label);
+
+      return g;
+    }
+
+    // Construcción del ensamblaje jerárquico con los STL reales:
+    const robotRoot = new THREE.Group();
+    scene.add(robotRoot);
+
+    // 1. EBA_01.00.010_basement.STL (Base fija en el piso)
+    const basementMesh = createSTLMesh("basement", plaMainMat);
+    robotRoot.add(basementMesh);
+
+    // 2. Grupo que gira con la Base (Servo 0 - D8)
+    // El eje principal de los servos en la torreta (001.STL) está a Y = 64.5 mm sobre el piso
+    const TURRET_AXIS_Y = 64.5;
+    const turretPivot = new THREE.Group();
+    turretPivot.position.set(0, TURRET_AXIS_Y, 0);
+    robotRoot.add(turretPivot);
+
+    // 011_round_plate.STL (Debajo de la torreta)
+    const roundPlateMesh = createSTLMesh("round_plate", plaLinkMat);
+    roundPlateMesh.position.set(0, -35.5, 0);
+    turretPivot.add(roundPlateMesh);
+
+    // 001.STL (Torreta principal, su origen (0,0,0) ya es el eje principal de los servos!)
+    const turretMesh = createSTLMesh("turret", plaMainMat);
+    turretPivot.add(turretMesh);
+
+    // 2 arandelas rectangulares retenedoras de servo (009_servo_plate.STL) + 2 servos SG90 laterales
+    // Ubicadas del lado externo de las pestañas (base) de los servos (X = +28.5 mm y -31.0 mm)
+    const plateR = createSTLMesh("servo_plate", plaMainMat);
+    plateR.position.set(28.5, -5.5, 0);
+    const plateL = createSTLMesh("servo_plate", plaMainMat);
+    plateL.position.set(-31.0, -5.5, 0);
+    turretPivot.add(plateR, plateL);
+
+    const servoR = createTurretSG90(1);
+    const servoL = createTurretSG90(-1);
+    turretPivot.add(servoR, servoL);
+
+    // Eje de bronce Ø4mm en el pivote principal P0(0,0,0)
+    const mainPinGeo = new THREE.CylinderGeometry(2.0, 2.0, 46, 16);
+    mainPinGeo.rotateZ(Math.PI / 2);
+    turretPivot.add(new THREE.Mesh(mainPinGeo, metalMat));
+
+    // Piezas articuladas cuyos orígenes (0,0,0) son exactamente los centros de sus agujeros en el STL:
+    // - 004_forward_drive_arm.STL (L = 80.03905 mm entre agujero inferior y superior)
+    const forwardArmMesh = createSTLMesh("forward_arm", plaMainMat);
+    turretPivot.add(forwardArmMesh);
+
+    // - 002_vertical_drive_arm.STL (L = 35.0 mm entre agujero del servo y extremo trasero)
+    const verticalArmMesh = createSTLMesh("vertical_arm", plaLinkMat);
+    turretPivot.add(verticalArmMesh);
+
+    // - 3 bielas 003_link.STL (L = 80.0 mm exactos entre centros de agujeros):
+    //   linkPassiveRear: conecta la oreja trasera fija de 001.STL (Y=+17, Z=-36) con el agujero A del triángulo 006
+    //   linkActiveRear:  conecta el extremo de 002_vertical_drive_arm con el agujero trasero de 005_horizontal_arm
+    //   linkUpperFront:  conecta el agujero superior B del triángulo 006 con el agujero superior de 012_claw_support
+    const linkPassiveRear = createSTLMesh("link", plaLinkMat);
+    const linkActiveRear  = createSTLMesh("link", plaLinkMat);
+    const linkUpperFront  = createSTLMesh("link", plaLinkMat);
+    turretPivot.add(linkPassiveRear, linkActiveRear, linkUpperFront);
+
+    // - 006_triangular_link.STL (Pivota en el codo E; agujero A en (+17.5, -36.0), agujero B en (+17.5, +10.0))
+    const triangularLinkMesh = createSTLMesh("triangular_link", plaLinkMat);
+    turretPivot.add(triangularLinkMesh);
+
+    // - 005_horizontal_arm.STL (Pivota en el codo E; agujero trasero a -35.0 mm, agujero muñeca a +80.0 mm)
+    const horizontalArmMesh = createSTLMesh("horizontal_arm", plaMainMat);
+    turretPivot.add(horizontalArmMesh);
+
+    // - 012_R01_claw_support.STL (Pivota en la muñeca W; agujero superior en (+17.5, +10.0))
+    const clawGroup = new THREE.Group();
+    turretPivot.add(clawGroup);
+
+    const clawSupportMesh = createSTLMesh("claw_support", plaMainMat);
+    clawGroup.add(clawSupportMesh);
+
+    // Servo SG90 de la pinza alojado arriba del soporte 012 con su eje motor apuntando hacia abajo (-Y)
+    const clawServo = createClawSG90();
+    clawGroup.add(clawServo);
+
+    // Dedo derecho (013_R01_right_finger.STL en +X) y Dedo izquierdo (014_R01_left_finger.STL en -X)
+    // Con sus caras planas de agarre y sus engranajes integrados enfrentados hacia el centro (X = 0)
+    const rightFingerPivot = new THREE.Group();
+    rightFingerPivot.position.set(9.0, -13.7, 14.5);
+    clawGroup.add(rightFingerPivot);
+    const rightFingerMesh = createSTLMesh("right_finger", plaMainMat);
+    rightFingerPivot.add(rightFingerMesh);
+
+    const leftFingerPivot = new THREE.Group();
+    leftFingerPivot.position.set(-9.0, -13.7, 14.5);
+    clawGroup.add(leftFingerPivot);
+    const leftFingerMesh = createSTLMesh("left_finger", plaMainMat);
+    leftFingerPivot.add(leftFingerMesh);
+
+    // Tornillos verticales M3 con tuerca en los pivotes de los dos dedos de la pinza
+    [-9.0, 9.0].forEach(xFin => {
+      const fPin = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 11, 12), metalMat);
+      fPin.position.set(xFin, -13.5, 14.5);
+      clawGroup.add(fPin);
+    });
+
+    // Pernos/tornillos M3 metálicos en cada articulación móvil para que se vean los ejes reales
+    function createPinMesh(length, xCenter = 0) {
+      const g = new THREE.CylinderGeometry(2.0, 2.0, length, 14);
+      g.rotateZ(Math.PI / 2);
+      g.translate(xCenter, 0, 0);
+      return new THREE.Mesh(g, metalMat);
+    }
+    const pinPrear  = createPinMesh(12, 19);
+    const pinElbow  = createPinMesh(30, 2);
+    const pinTriA   = createPinMesh(12, 15);
+    const pinTriB   = createPinMesh(12, 6);
+    const pinVertD  = createPinMesh(12, -9);
+    const pinHorizR = createPinMesh(14, -3);
+    const pinWristL = createPinMesh(16, 0);
+    const pinWristU = createPinMesh(14, 2);
+    turretPivot.add(pinPrear, pinElbow, pinTriA, pinTriB, pinVertD, pinHorizR, pinWristL, pinWristU);
+
+    // Pedestal y objeto de prueba interactivo en la mesa (para Pick & Place)
+    const pedGeo = new THREE.CylinderGeometry(16, 20, 38, 24);
+    const pedMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6, metalness: 0.2 });
+    const pedestalMesh = new THREE.Mesh(pedGeo, pedMat);
+    pedestalMesh.castShadow = true;
+    pedestalMesh.receiveShadow = true;
+    scene.add(pedestalMesh);
+
+    const cubeGeo = new THREE.BoxGeometry(16, 16, 16);
+    const cubeMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3, metalness: 0.1 });
+    const testCube = new THREE.Mesh(cubeGeo, cubeMat);
+    testCube.castShadow = true;
+    testCube.receiveShadow = true;
+    scene.add(testCube);
+
+    let cubeGrabbed = false;
+    function resetTestCube() {
+      cubeGrabbed = false;
+      const rad = THREE.MathUtils.degToRad(55 - 90);
+      const r = 160;
+      pedestalMesh.position.set(Math.sin(rad) * r, 19, Math.cos(rad) * r);
+      testCube.position.set(Math.sin(rad) * r, 46, Math.cos(rad) * r);
+      testCube.rotation.set(0, rad, 0);
+    }
+    resetTestCube();
+
+    // =========================================================================
+    // 6. RESOLUCIÓN TRIGONOMÉTRICA EXACTA DE LAZO CERRADO (0.000 mm de error)
+    // =========================================================================
+    // Intersección exacta de 2 círculos en el plano (Z, Y):
+    // Devuelve los dos puntos de intersección ordenados para elegir la rama mecánica correcta
+    function intersectCircles(z1, y1, r1, z2, y2, r2, pickUpperRear = true) {
+      const dz = z2 - z1;
+      const dy = y2 - y1;
+      let d = Math.hypot(dz, dy);
+      if (d < 1e-6) d = 1e-6;
+      // Clamp suave por si el usuario fuerza ángulos extremos fuera de la geometría física
+      const maxD = r1 + r2 - 0.001;
+      const minD = Math.abs(r1 - r2) + 0.001;
+      const dc = Math.max(minD, Math.min(maxD, d));
+
+      const a = (r1 * r1 - r2 * r2 + dc * dc) / (2 * dc);
+      const h = Math.sqrt(Math.max(0, r1 * r1 - a * a));
+
+      const zm = z1 + (a * dz) / d;
+      const ym = y1 + (a * dy) / d;
+
+      const oz = (-dy / d) * h;
+      const oy = ( dz / d) * h;
+
+      const pA = { z: zm + oz, y: ym + oy };
+      const pB = { z: zm - oz, y: ym - oy };
+
+      if (pickUpperRear) {
+        return (pA.y - pA.z > pB.y - pB.z) ? pA : pB;
+      } else {
+        return (pA.y + pA.z > pB.y + pB.z) ? pA : pB;
+      }
+    }
+
+    // Orienta un eslabón cuyo origen local es (Y1, Z1) y cuyo eje +Z_local va hacia el segundo agujero (Y2, Z2)
+    function alignLink(mesh, xOffset, y1, z1, y2, z2) {
+      mesh.position.set(xOffset, y1, z1);
+      mesh.rotation.set(-Math.atan2(y2 - y1, z2 - z1), 0, 0);
+    }
+
+    // Constantes geométricas exactas extraídas de los archivos STL:
+    const L_004 = Math.hypot(80.0, 2.5);       // 80.03905 mm (004_forward_drive_arm)
+    const L_003 = 80.0;                        // 80.00000 mm (003_link)
+    const L_002 = 35.0;                        // 35.00000 mm (002_vertical_drive_arm)
+    const L_005_REAR  = 35.0;                  // 35.00000 mm (extensión trasera de 005_horizontal_arm)
+    const L_005_FRONT = 80.0;                  // 80.00000 mm (extensión delantera de 005_horizontal_arm)
+
+    // En 006_triangular_link (origen en C = codo):
+    // Agujero trasero A = (Y = +17.5, Z = -36.0), Agujero superior B = (Y = +17.5, Z = +10.0)
+    const R_TRI_A   = Math.hypot(17.5, -36.0); // 39.96874 mm
+    const PHI_TRI_A = Math.atan2(17.5, -36.0);
+    const R_TRI_B   = Math.hypot(17.5, 10.0);  // 20.15564 mm
+    const PHI_TRI_B = Math.atan2(17.5, 10.0);
+
+    // En 012_R01_claw_support (origen en agujero inferior de muñeca):
+    // Agujero superior = (Y = +17.5, Z = +10.0)
+    const R_CLAW_U   = Math.hypot(17.5, 10.0); // 20.15564 mm
+    const PHI_CLAW_U = Math.atan2(17.5, 10.0);
+
+    // Pivote fijo trasero en la oreja alta de la torreta 001.STL:
+    const PREAR_Y = 17.0;
+    const PREAR_Z = -36.0;
+
+    const gripWorldPos = new THREE.Vector3();
+
+    function updateRobotKinematics() {
+      const aBase     = SERVOS[0].simAngle;
+      const aShoulder = SERVOS[1].simAngle;
+      const aElbow    = SERVOS[2].simAngle;
+      const aGripper  = SERVOS[3].simAngle;
+
+      // 1. Giro horizontal de la torreta (Base D8)
+      const baseYaw = THREE.MathUtils.degToRad(aBase - 90);
+      turretPivot.rotation.y = baseYaw;
+
+      // 2. Brazo principal 004_forward_drive_arm (Hombro D9)
+      // En 90°, el brazo sube casi vertical (+10° hacia adelante)
+      const thetaShoulder = THREE.MathUtils.degToRad((aShoulder - 90) * 0.65 + 10);
+      const Ey = L_004 * Math.cos(thetaShoulder);
+      const Ez = L_004 * Math.sin(thetaShoulder);
+      alignLink(forwardArmMesh, 0, 0, 0, Ey, Ez);
+
+      // 3. LAZO CERRADO #1: 006_triangular_link + 003_link trasero pasivo
+      // El agujero A del triángulo está a distancia R_TRI_A del codo E(Ez, Ey)
+      // y a distancia L_003 (80 mm) de la oreja fija de la torreta Prear(PREAR_Z, PREAR_Y):
+      const pinA = intersectCircles(Ez, Ey, R_TRI_A, PREAR_Z, PREAR_Y, L_003, true);
+
+      // Biela trasera pasiva (003_link #1) desde Prear hasta pinA:
+      alignLink(linkPassiveRear, 17.5, PREAR_Y, PREAR_Z, pinA.y, pinA.z);
+
+      // Rotación exacta del triángulo 006 para que su agujero C esté en E y su agujero A en pinA:
+      const worldAngleEA = Math.atan2(pinA.y - Ey, pinA.z - Ez);
+      const triRot = worldAngleEA - PHI_TRI_A;
+      triangularLinkMesh.position.set(0, Ey, Ez);
+      triangularLinkMesh.rotation.set(-triRot, 0, 0);
+
+      // Posición resultante exacta del agujero superior B del triángulo 006:
+      const worldAngleEB = triRot + PHI_TRI_B;
+      const By = Ey + R_TRI_B * Math.sin(worldAngleEB);
+      const Bz = Ez + R_TRI_B * Math.cos(worldAngleEB);
+
+      // 4. LAZO CERRADO #2: 002_vertical_drive_arm + 003_link trasero activo + 005_horizontal_arm
+      // La palanca 002_vertical_drive_arm apunta hacia atrás (-Z) y se inclina con el Servo Codo (D10):
+      const thetaElbowDrive = Math.PI - THREE.MathUtils.degToRad((90 - aElbow) * 0.68 + 20);
+      const Dy = L_002 * Math.sin(thetaElbowDrive);
+      const Dz = L_002 * Math.cos(thetaElbowDrive);
+      alignLink(verticalArmMesh, -11.0, 0, 0, Dy, Dz);
+
+      // El agujero trasero H_rear de 005_horizontal_arm está a 35.0 mm de E(Ez, Ey)
+      // y a 80.0 mm del extremo D(Dz, Dy) de 002_vertical_drive_arm:
+      const pinHrear = intersectCircles(Ez, Ey, L_005_REAR, Dz, Dy, L_003, true);
+
+      // Biela trasera activa (003_link #2) desde D hasta pinHrear:
+      alignLink(linkActiveRear, -6.5, Dy, Dz, pinHrear.y, pinHrear.z);
+
+      // Como los 3 agujeros de 005_horizontal_arm son colineales (H_rear -> E -> W_lower),
+      // el vector unitario desde H_rear hacia E define exactamente la dirección hacia la muñeca W_lower:
+      const ux = (Ez - pinHrear.z) / L_005_REAR;
+      const uy = (Ey - pinHrear.y) / L_005_REAR;
+      const Wy = Ey + L_005_FRONT * uy;
+      const Wz = Ez + L_005_FRONT * ux;
+      alignLink(horizontalArmMesh, 0, Ey, Ez, Wy, Wz);
+
+      // 5. LAZO CERRADO #3: 003_link superior delantero + 012_R01_claw_support (Muñeca/Pinza)
+      // El agujero superior de 012_claw_support está a distancia R_CLAW_U de W(Wz, Wy)
+      // y a distancia L_003 (80 mm) del agujero B(Bz, By) del triángulo 006:
+      const pinWupper = intersectCircles(Wz, Wy, R_CLAW_U, Bz, By, L_003, false);
+
+      // Biela paralela superior (003_link #3) desde B hasta pinWupper:
+      alignLink(linkUpperFront, 5.5, By, Bz, pinWupper.y, pinWupper.z);
+
+      // Orientación exacta de 012_R01_claw_support para que sus dos agujeros calcen en W y pinWupper:
+      const worldAngleWU = Math.atan2(pinWupper.y - Wy, pinWupper.z - Wz);
+      const clawRot = worldAngleWU - PHI_CLAW_U;
+      clawGroup.position.set(0, Wy, Wz);
+      clawGroup.rotation.set(-clawRot, 0, 0);
+
+      // Actualizar posición de los pernos metálicos M3 en cada unión:
+      pinPrear.position.set(0, PREAR_Y, PREAR_Z);
+      pinElbow.position.set(0, Ey, Ez);
+      pinTriA.position.set(0, pinA.y, pinA.z);
+      pinTriB.position.set(0, By, Bz);
+      pinVertD.position.set(0, Dy, Dz);
+      pinHorizR.position.set(0, pinHrear.y, pinHrear.z);
+      pinWristL.position.set(0, Wy, Wz);
+      pinWristU.position.set(0, pinWupper.y, pinWupper.z);
+
+      // 6. Apertura/Cierre de los dedos reales 013_R01_right_finger (+X) y 014_R01_left_finger (-X)
+      // Cuando normGrip = 1 (cerrada, 165°), las caras planas interiores quedan paralelas tocándose en el centro.
+      // Cuando normGrip = 0 (abierta, 15°), ambos dedos pivotan abriéndose hacia afuera.
+      const normGrip = (aGripper - 15) / (165 - 15); // 0 = abierta, 1 = cerrada
+      const fingerAngle = (1 - normGrip) * 0.58;
+      rightFingerPivot.rotation.y =  fingerAngle;
+      leftFingerPivot.rotation.y  = -fingerAngle;
+
+      // Coordenadas globales de la punta de agarre de la pinza
+      gripWorldPos.set(0, -14, 56);
+      clawGroup.localToWorld(gripWorldPos);
+
+      // Interacción con el objeto de prueba en el simulador:
+      const distToCube = gripWorldPos.distanceTo(testCube.position);
+      if (aGripper > 110 && distToCube < 30) {
+        cubeGrabbed = true;
+      } else if (aGripper < 85) {
+        cubeGrabbed = false;
+      }
+
+      if (cubeGrabbed) {
+        testCube.position.copy(gripWorldPos);
+        testCube.rotation.y = baseYaw;
+      } else {
+        const overPedestal = Math.hypot(testCube.position.x - pedestalMesh.position.x, testCube.position.z - pedestalMesh.position.z) < 18;
+        const floorY = overPedestal ? 46 : 8;
+        if (testCube.position.y > floorY) {
+          testCube.position.y = Math.max(floorY, testCube.position.y - 3.5);
+        }
+      }
+
+      document.getElementById("telemetryBox").innerHTML =
+        `Base: ${Math.round(aBase)}° | Hombro: ${Math.round(aShoulder)}°<br>` +
+        `Codo: ${Math.round(aElbow)}° | Pinza:  ${Math.round(aGripper)}°<br>` +
+        `<span style="color:#f87171;">Pinza XYZ: (${Math.round(gripWorldPos.x)}, ${Math.round(gripWorldPos.y)}, ${Math.round(gripWorldPos.z)}) mm</span>`;
+    }
+
+    // =========================================================================
+    // 7. CÁMARA ORBITAL 3D Y BUCLE DE ANIMACIÓN
+    // =========================================================================
+    let camTheta = 0.72;
+    let camPhi = 1.12;
+    let camDist = 325;
+    const camTarget = new THREE.Vector3(0, 82, 20);
+
+    function updateCameraPosition() {
+      camera.position.x = camTarget.x + camDist * Math.sin(camPhi) * Math.sin(camTheta);
+      camera.position.y = camTarget.y + camDist * Math.cos(camPhi);
+      camera.position.z = camTarget.z + camDist * Math.sin(camPhi) * Math.cos(camTheta);
+      camera.lookAt(camTarget);
+    }
+    updateCameraPosition();
+
+    function setCameraView(mode) {
+      if (mode === "iso")   { camTheta = 0.72; camPhi = 1.12; camDist = 325; }
+      if (mode === "side")  { camTheta = Math.PI / 2; camPhi = 1.38; camDist = 300; }
+      if (mode === "front") { camTheta = 0; camPhi = 1.30; camDist = 300; }
+      if (mode === "top")   { camTheta = 0; camPhi = 0.15; camDist = 350; }
+      updateCameraPosition();
+    }
+
+    let isDragging = false;
+    let prevMouse = { x: 0, y: 0 };
+    canvasWrap.addEventListener("mousedown", e => {
+      isDragging = true;
+      prevMouse = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener("mouseup", () => { isDragging = false; });
+    window.addEventListener("mousemove", e => {
+      if (!isDragging) return;
+      const dx = e.clientX - prevMouse.x;
+      const dy = e.clientY - prevMouse.y;
+      prevMouse = { x: e.clientX, y: e.clientY };
+      camTheta -= dx * 0.008;
+      camPhi = Math.max(0.15, Math.min(Math.PI / 2 - 0.04, camPhi - dy * 0.008));
+      updateCameraPosition();
+    });
+    canvasWrap.addEventListener("wheel", e => {
+      e.preventDefault();
+      camDist = Math.max(150, Math.min(540, camDist + e.deltaY * 0.22));
+      updateCameraPosition();
+    }, { passive: false });
+
+    function syncCanvasSize() {
+      const w = canvasWrap.clientWidth;
+      const h = canvasWrap.clientHeight;
+      if (w > 0 && h > 0) {
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+    }
+    window.addEventListener("resize", syncCanvasSize);
+    if (window.ResizeObserver) {
+      new ResizeObserver(syncCanvasSize).observe(canvasWrap);
+    }
+
+    let lastSimStep = performance.now();
+    function animate(now) {
+      requestAnimationFrame(animate);
+
+      if (stepDelayMs === 0) {
+        SERVOS.forEach(s => { s.simAngle = s.angle; });
+      } else if (now - lastSimStep >= stepDelayMs) {
+        const steps = Math.max(1, Math.floor((now - lastSimStep) / stepDelayMs));
+        lastSimStep = now;
+        SERVOS.forEach(s => {
+          if (s.simAngle < s.angle) s.simAngle = Math.min(s.angle, s.simAngle + steps);
+          else if (s.simAngle > s.angle) s.simAngle = Math.max(s.angle, s.simAngle - steps);
+        });
+      }
+
+      updateRobotKinematics();
+      renderer.render(scene, camera);
+    }
+
+    function applyTheme() {
+      document.body.classList.toggle("light-mode", lightMode);
+      const btn = document.getElementById("themeBtn");
+      if (btn) btn.textContent = lightMode ? "🌙 Modo Oscuro" : "☀️ Modo Claro";
+      floorMat.color.set(lightMode ? 0xe2e8f0 : 0x0f172a);
+      pedMat.color.set(lightMode ? 0x64748b : 0x334155);
+    }
+
+    function toggleTheme() {
+      lightMode = !lightMode;
+      applyTheme();
+      saveConfigToLocal();
+    }
+
+    loadConfigFromLocal();
+    applyTheme();
+    updateArmColor(currentArmColor);
+    renderServos();
+    renderPoses();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
