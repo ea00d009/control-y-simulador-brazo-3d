@@ -98,14 +98,32 @@ El proyecto fue diseñado bajo una arquitectura **Zero-Dependency Local Stack** 
 
 ---
 
-## 🔌 Conexión en Arduino Nano + Sensor Shield
+## 🔌 Planos de Circuito y Conexión en Arduino Nano + GBK IoT Shield Rev. 1.0
 
-| Eje del Brazo | Pin Digital (Shield) | Cable Marrón / Negro | Cable Rojo | Cable Naranja / Amarillo |
+El proyecto utiliza la placa de expansión **[GBK IoT Shield Rev. 1.0](https://www.gbkrobotics.com.br/about-5)** para Arduino Nano, que dispone de peines triples dedicados (`Señal | +5V | GND`) en los pines digitales `D8` a `D12`, etapa de regulación de `+5V` con bornera para fuente externa (`+9V / GND`), capacitores de filtrado (`C1`, `C2`) y zócalo para `ESP-01`.
+
+### 1. Plano de Conexiones Físicas (Estilo Fritzing)
+
+[![Plano de Conexiones Físicas — Arduino Nano + GBK IoT Shield Rev. 1.0](plano_conexiones_gbk_shield.png)](plano_conexiones_gbk_shield.svg)
+
+> 📐 *Archivos incluidos en el repositorio: [`plano_conexiones_gbk_shield.png`](plano_conexiones_gbk_shield.png) (imagen de alta resolución) y [`plano_conexiones_gbk_shield.svg`](plano_conexiones_gbk_shield.svg) (vectorial escalable).*
+
+### 2. Plano Esquemático Eléctrico Normalizado
+
+[![Plano Esquemático Eléctrico — Arduino Nano + GBK IoT Shield Rev. 1.0](esquematico_electrico_nano.png)](esquematico_electrico_nano.svg)
+
+> ⚡ *Archivos incluidos en el repositorio: [`esquematico_electrico_nano.png`](esquematico_electrico_nano.png) y [`esquematico_electrico_nano.svg`](esquematico_electrico_nano.svg).*
+
+### 📋 Tabla de Pines en la GBK IoT Shield Rev. 1.0 (Columna Derecha `D8..D11`)
+
+En los peines de 3 pines ubicados a la derecha del Arduino Nano sobre la **GBK IoT Shield**, el orden físico de izquierda a derecha (**de adentro hacia el borde exterior de la placa**) es:
+
+| Eje del Brazo | Pin Digital (Shield) | Pin Interno (Pegado al Nano) | Pin Central | Pin Externo (Borde derecho) |
 | :--- | :---: | :---: | :---: | :---: |
-| **1. Base (Giro Horizontal)** | **D8** | `G` (GND) | `V` (+5V) | `S` (Señal) |
-| **2. Hombro (Adelante / Atrás)** | **D9** | `G` (GND) | `V` (+5V) | `S` (Señal) |
-| **3. Codo (Arriba / Abajo)** | **D10** | `G` (GND) | `V` (+5V) | `S` (Señal) |
-| **4. Pinza (Gripper)** | **D11** | `G` (GND) | `V` (+5V) | `S` (Señal) |
+| **1. Base (Giro Horizontal)** | **D8** (`S0`) | **Señal (`D8`)** — *Naranja / Amarillo* | **`+5V`** — *Rojo* | **`GND`** — *Marrón / Negro* |
+| **2. Hombro (Adelante / Atrás)** | **D9** (`S1`) | **Señal (`D9`)** — *Naranja / Amarillo* | **`+5V`** — *Rojo* | **`GND`** — *Marrón / Negro* |
+| **3. Codo (Arriba / Abajo)** | **D10** (`S2`) | **Señal (`D10`)** — *Naranja / Amarillo* | **`+5V`** — *Rojo* | **`GND`** — *Marrón / Negro* |
+| **4. Pinza (Gripper)** | **D11** (`S3`) | **Señal (`D11`)** — *Naranja / Amarillo* | **`+5V`** — *Rojo* | **`GND`** — *Marrón / Negro* |
 
 ### 🚀 Compilación y Carga del Firmware (`brazo_robot.ino`)
 

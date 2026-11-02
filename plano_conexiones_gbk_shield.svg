@@ -1,0 +1,623 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 940" width="1400" height="940" font-family="Segoe UI, system-ui, -apple-system, sans-serif">
+  <defs>
+    <!-- Sombras suaves estilo Fritzing -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+    <filter id="cardShadow" x="-5%" y="-5%" width="112%" height="112%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+
+    <!-- Gradiente PCB Azul GBK IoT Shield -->
+    <linearGradient id="gbkPcbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e4f8b"/>
+      <stop offset="50%" stop-color="#0a3d6e"/>
+      <stop offset="100%" stop-color="#072c52"/>
+    </linearGradient>
+
+    <!-- Gradiente PCB Azul Oscuro Arduino Nano -->
+    <linearGradient id="nanoPcbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#153e6c"/>
+      <stop offset="100%" stop-color="#0b2442"/>
+    </linearGradient>
+
+    <!-- Gradiente Cuerpo Servo SG90 Azul Translúcido -->
+    <linearGradient id="sg90Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="60%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+
+    <!-- Gradiente Metálico USB / Pines -->
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Pin dorado estilo Fritzing -->
+    <g id="goldPin">
+      <rect x="-5" y="-5" width="10" height="10" rx="1.5" fill="#1e293b" stroke="#0f172a" stroke-width="1"/>
+      <circle cx="0" cy="0" r="2.6" fill="#fbbf24" stroke="#b45309" stroke-width="0.8"/>
+    </g>
+  </defs>
+
+  <!-- FONDO GENERAL CON GRILLA TÉCNICA -->
+  <rect width="1400" height="940" fill="#0b1120"/>
+  <g stroke="#162238" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="940"/>
+    <line x1="25" y1="0" x2="25" y2="940"/>
+    <line x1="50" y1="0" x2="50" y2="940"/>
+    <line x1="75" y1="0" x2="75" y2="940"/>
+    <line x1="100" y1="0" x2="100" y2="940"/>
+    <line x1="125" y1="0" x2="125" y2="940"/>
+    <line x1="150" y1="0" x2="150" y2="940"/>
+    <line x1="175" y1="0" x2="175" y2="940"/>
+    <line x1="200" y1="0" x2="200" y2="940"/>
+    <line x1="225" y1="0" x2="225" y2="940"/>
+    <line x1="250" y1="0" x2="250" y2="940"/>
+    <line x1="275" y1="0" x2="275" y2="940"/>
+    <line x1="300" y1="0" x2="300" y2="940"/>
+    <line x1="325" y1="0" x2="325" y2="940"/>
+    <line x1="350" y1="0" x2="350" y2="940"/>
+    <line x1="375" y1="0" x2="375" y2="940"/>
+    <line x1="400" y1="0" x2="400" y2="940"/>
+    <line x1="425" y1="0" x2="425" y2="940"/>
+    <line x1="450" y1="0" x2="450" y2="940"/>
+    <line x1="475" y1="0" x2="475" y2="940"/>
+    <line x1="500" y1="0" x2="500" y2="940"/>
+    <line x1="525" y1="0" x2="525" y2="940"/>
+    <line x1="550" y1="0" x2="550" y2="940"/>
+    <line x1="575" y1="0" x2="575" y2="940"/>
+    <line x1="600" y1="0" x2="600" y2="940"/>
+    <line x1="625" y1="0" x2="625" y2="940"/>
+    <line x1="650" y1="0" x2="650" y2="940"/>
+    <line x1="675" y1="0" x2="675" y2="940"/>
+    <line x1="700" y1="0" x2="700" y2="940"/>
+    <line x1="725" y1="0" x2="725" y2="940"/>
+    <line x1="750" y1="0" x2="750" y2="940"/>
+    <line x1="775" y1="0" x2="775" y2="940"/>
+    <line x1="800" y1="0" x2="800" y2="940"/>
+    <line x1="825" y1="0" x2="825" y2="940"/>
+    <line x1="850" y1="0" x2="850" y2="940"/>
+    <line x1="875" y1="0" x2="875" y2="940"/>
+    <line x1="900" y1="0" x2="900" y2="940"/>
+    <line x1="925" y1="0" x2="925" y2="940"/>
+    <line x1="950" y1="0" x2="950" y2="940"/>
+    <line x1="975" y1="0" x2="975" y2="940"/>
+    <line x1="1000" y1="0" x2="1000" y2="940"/>
+    <line x1="1025" y1="0" x2="1025" y2="940"/>
+    <line x1="1050" y1="0" x2="1050" y2="940"/>
+    <line x1="1075" y1="0" x2="1075" y2="940"/>
+    <line x1="1100" y1="0" x2="1100" y2="940"/>
+    <line x1="1125" y1="0" x2="1125" y2="940"/>
+    <line x1="1150" y1="0" x2="1150" y2="940"/>
+    <line x1="1175" y1="0" x2="1175" y2="940"/>
+    <line x1="1200" y1="0" x2="1200" y2="940"/>
+    <line x1="1225" y1="0" x2="1225" y2="940"/>
+    <line x1="1250" y1="0" x2="1250" y2="940"/>
+    <line x1="1275" y1="0" x2="1275" y2="940"/>
+    <line x1="1300" y1="0" x2="1300" y2="940"/>
+    <line x1="1325" y1="0" x2="1325" y2="940"/>
+    <line x1="1350" y1="0" x2="1350" y2="940"/>
+    <line x1="1375" y1="0" x2="1375" y2="940"/>
+    <line x1="1400" y1="0" x2="1400" y2="940"/>
+    <line x1="0" y1="0" x2="1400" y2="0"/>
+    <line x1="0" y1="25" x2="1400" y2="25"/>
+    <line x1="0" y1="50" x2="1400" y2="50"/>
+    <line x1="0" y1="75" x2="1400" y2="75"/>
+    <line x1="0" y1="100" x2="1400" y2="100"/>
+    <line x1="0" y1="125" x2="1400" y2="125"/>
+    <line x1="0" y1="150" x2="1400" y2="150"/>
+    <line x1="0" y1="175" x2="1400" y2="175"/>
+    <line x1="0" y1="200" x2="1400" y2="200"/>
+    <line x1="0" y1="225" x2="1400" y2="225"/>
+    <line x1="0" y1="250" x2="1400" y2="250"/>
+    <line x1="0" y1="275" x2="1400" y2="275"/>
+    <line x1="0" y1="300" x2="1400" y2="300"/>
+    <line x1="0" y1="325" x2="1400" y2="325"/>
+    <line x1="0" y1="350" x2="1400" y2="350"/>
+    <line x1="0" y1="375" x2="1400" y2="375"/>
+    <line x1="0" y1="400" x2="1400" y2="400"/>
+    <line x1="0" y1="425" x2="1400" y2="425"/>
+    <line x1="0" y1="450" x2="1400" y2="450"/>
+    <line x1="0" y1="475" x2="1400" y2="475"/>
+    <line x1="0" y1="500" x2="1400" y2="500"/>
+    <line x1="0" y1="525" x2="1400" y2="525"/>
+    <line x1="0" y1="550" x2="1400" y2="550"/>
+    <line x1="0" y1="575" x2="1400" y2="575"/>
+    <line x1="0" y1="600" x2="1400" y2="600"/>
+    <line x1="0" y1="625" x2="1400" y2="625"/>
+    <line x1="0" y1="650" x2="1400" y2="650"/>
+    <line x1="0" y1="675" x2="1400" y2="675"/>
+    <line x1="0" y1="700" x2="1400" y2="700"/>
+    <line x1="0" y1="725" x2="1400" y2="725"/>
+    <line x1="0" y1="750" x2="1400" y2="750"/>
+    <line x1="0" y1="775" x2="1400" y2="775"/>
+    <line x1="0" y1="800" x2="1400" y2="800"/>
+    <line x1="0" y1="825" x2="1400" y2="825"/>
+    <line x1="0" y1="850" x2="1400" y2="850"/>
+    <line x1="0" y1="875" x2="1400" y2="875"/>
+    <line x1="0" y1="900" x2="1400" y2="900"/>
+    <line x1="0" y1="925" x2="1400" y2="925"/>
+  </g>
+
+  <!-- ENCABEZADO DEL PLANO -->
+  <rect x="28" y="20" width="1344" height="72" rx="12" fill="#162032" stroke="#2e3f59" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <text x="48" y="50" fill="#f8fafc" font-size="21" font-weight="800">📐 Plano de Conexiones Físicas (Fritzing) — Arduino Nano + GBK IoT Shield Rev. 1.0</text>
+  <text x="48" y="74" fill="#94a3b8" font-size="13.5">Taller de Automatización 7° AÑO • Brazo Robótico Impreso 3D (4 DoF) con 4 Micro-Servos SG90 en pines D8, D9, D10 y D11</text>
+  <rect x="1105" y="32" width="250" height="48" rx="8" fill="#0f172a" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="1230" y="51" fill="#60a5fa" font-size="11.5" font-weight="700" text-anchor="middle">ORDEN EN SHIELD GBK (D8..D11)</text>
+  <text x="1230" y="69" fill="#e2e8f0" font-size="11.5" font-weight="700" text-anchor="middle">Adentro: S  |  Centro: +5V  |  Afuera: GND</text>
+
+  <!-- ===================================================================== -->
+  <!-- 1. PLACA AZUL: GBK IOT SHIELD REV. 1.0 (CENTRO-IZQUIERDA)              -->
+  <!-- ===================================================================== -->
+  <g transform="translate(205, 130)" filter="url(#dropShadow)">
+    <!-- Sustrato PCB Azul GBK IoT Shield -->
+    <rect x="0" y="0" width="460" height="630" rx="10" fill="url(#gbkPcbGrad)" stroke="#60a5fa" stroke-width="2"/>
+
+    <!-- Agujeros de fijación M3 en la PCB -->
+    <circle cx="20" cy="135" r="8" fill="#0b1120" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="20" cy="485" r="8" fill="#0b1120" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="436" cy="390" r="8" fill="#0b1120" stroke="#cbd5e1" stroke-width="2"/>
+
+    <!-- Serigrafía principal GBK IOT Shield bien ubicada entre A0..A3 y el Nano -->
+    <text x="128" y="95" fill="#e2e8f0" font-size="22" font-weight="700" letter-spacing="1.5" transform="rotate(90, 128, 95)" opacity="0.9">GBK IOT Shield</text>
+    <text x="440" y="470" fill="#cbd5e1" font-size="13" font-weight="700" transform="rotate(90, 440, 470)" opacity="0.85">Rev. 1.0</text>
+    <text x="230" y="378" fill="#93c5fd" font-size="11" font-family="monospace" text-anchor="middle" opacity="0.75">www.gbkrobotics.com.br</text>
+
+    <!-- COLUMNA IZQUIERDA DE PEINES ANALÓGICOS (A0..A5) [GND | +5V | A0..A5] -->
+    <text x="64" y="58" fill="#93c5fd" font-size="10.5" font-weight="700" text-anchor="middle">PEINES ANALÓGICOS</text>
+    <text x="38" y="76" fill="#cbd5e1" font-size="9.5" font-family="monospace" text-anchor="middle">GND</text>
+    <text x="64" y="76" fill="#f87171" font-size="9.5" font-family="monospace" text-anchor="middle">+5V</text>
+    <text x="90" y="76" fill="#fde047" font-size="9.5" font-family="monospace" text-anchor="middle">SEÑAL</text>
+
+    <!-- Filas A0, A1, A2, A3 -->
+    <g transform="translate(38, 100)">
+      <!-- A0 -->
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="68" y="4" fill="#e2e8f0" font-size="11.5" font-weight="700">A0</text>
+      <!-- A1 -->
+      <rect x="-10" y="45" width="72" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="55"/><use href="#goldPin" x="26" y="55"/><use href="#goldPin" x="52" y="55"/>
+      <text x="68" y="59" fill="#e2e8f0" font-size="11.5" font-weight="700">A1</text>
+      <!-- A2 -->
+      <rect x="-10" y="100" width="72" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="110"/><use href="#goldPin" x="26" y="110"/><use href="#goldPin" x="52" y="110"/>
+      <text x="68" y="114" fill="#e2e8f0" font-size="11.5" font-weight="700">A2</text>
+      <!-- A3 -->
+      <rect x="-10" y="155" width="72" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="165"/><use href="#goldPin" x="26" y="165"/><use href="#goldPin" x="52" y="165"/>
+      <text x="68" y="169" fill="#e2e8f0" font-size="11.5" font-weight="700">A3</text>
+      <!-- I2C: GND +5V A4 A5 -->
+      <rect x="-10" y="215" width="98" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="225"/><use href="#goldPin" x="26" y="225"/><use href="#goldPin" x="52" y="225"/><use href="#goldPin" x="78" y="225"/>
+      <text x="0" y="250" fill="#cbd5e1" font-size="9" text-anchor="middle">GND</text>
+      <text x="26" y="250" fill="#f87171" font-size="9" text-anchor="middle">+5V</text>
+      <text x="52" y="250" fill="#fde047" font-size="9" text-anchor="middle">A4</text>
+      <text x="78" y="250" fill="#fde047" font-size="9" text-anchor="middle">A5</text>
+    </g>
+
+    <!-- ================================================================= -->
+    <!-- ARDUINO NANO MONTADO EN EL ZÓCALO SUPERIOR CENTRAL                -->
+    <!-- ================================================================= -->
+    <g transform="translate(155, -18)">
+      <!-- Cuerpo PCB Arduino Nano -->
+      <rect x="0" y="18" width="150" height="340" rx="6" fill="url(#nanoPcbGrad)" stroke="#93c5fd" stroke-width="1.8"/>
+
+      <!-- Conector Mini-USB superior (apuntando hacia arriba tal como en la foto) -->
+      <rect x="47" y="0" width="56" height="42" rx="3" fill="url(#metalGrad)" stroke="#475569" stroke-width="1.5"/>
+      <rect x="57" y="8" width="36" height="16" rx="1" fill="#64748b"/>
+      <text x="75" y="34" fill="#0f172a" font-size="9" font-weight="800" text-anchor="middle">MINI-USB</text>
+
+      <!-- Hileras de 15 pines laterales del Arduino Nano -->
+      <circle cx="12" cy="44" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="44" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="64" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="64" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="84" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="84" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="104" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="104" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="124" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="124" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="144" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="144" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="164" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="164" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="184" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="184" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="204" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="204" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="224" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="224" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="244" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="244" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="264" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="264" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="284" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="284" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="304" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="304" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+      <circle cx="12" cy="324" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/><circle cx="138" cy="324" r="3.5" fill="#fbbf24" stroke="#78350f" stroke-width="1"/>
+
+      <!-- Etiquetas de pines del Arduino Nano (izquierda y derecha) -->
+      <text x="22" y="48" fill="#cbd5e1" font-size="8.5" font-family="monospace">D13</text>
+      <text x="22" y="68" fill="#cbd5e1" font-size="8.5" font-family="monospace">3V3</text>
+      <text x="22" y="88" fill="#cbd5e1" font-size="8.5" font-family="monospace">REF</text>
+      <text x="22" y="108" fill="#cbd5e1" font-size="8.5" font-family="monospace">A0</text>
+      <text x="22" y="128" fill="#cbd5e1" font-size="8.5" font-family="monospace">A1</text>
+      <text x="22" y="148" fill="#cbd5e1" font-size="8.5" font-family="monospace">A2</text>
+      <text x="22" y="168" fill="#cbd5e1" font-size="8.5" font-family="monospace">A3</text>
+      <text x="22" y="188" fill="#cbd5e1" font-size="8.5" font-family="monospace">A4</text>
+      <text x="22" y="208" fill="#cbd5e1" font-size="8.5" font-family="monospace">A5</text>
+      <text x="22" y="228" fill="#cbd5e1" font-size="8.5" font-family="monospace">A6</text>
+      <text x="22" y="248" fill="#cbd5e1" font-size="8.5" font-family="monospace">A7</text>
+      <text x="22" y="268" fill="#cbd5e1" font-size="8.5" font-family="monospace">5V</text>
+      <text x="22" y="288" fill="#cbd5e1" font-size="8.5" font-family="monospace">RST</text>
+      <text x="22" y="308" fill="#cbd5e1" font-size="8.5" font-family="monospace">GND</text>
+      <text x="22" y="328" fill="#cbd5e1" font-size="8.5" font-family="monospace">VIN</text>
+      <text x="128" y="48" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D12</text>
+      <text x="128" y="68" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D11</text>
+      <text x="128" y="88" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D10</text>
+      <text x="128" y="108" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D9</text>
+      <text x="128" y="128" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D8</text>
+      <text x="128" y="148" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D7</text>
+      <text x="128" y="168" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D6</text>
+      <text x="128" y="188" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D5</text>
+      <text x="128" y="208" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D4</text>
+      <text x="128" y="228" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D3</text>
+      <text x="128" y="248" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">D2</text>
+      <text x="128" y="268" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">GND</text>
+      <text x="128" y="288" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">RST</text>
+      <text x="128" y="308" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">RX0</text>
+      <text x="128" y="328" fill="#cbd5e1" font-size="8.5" font-family="monospace" text-anchor="end">TX1</text>
+
+      <!-- Chip ATmega328P rotado a 45° -->
+      <g transform="translate(75, 145) rotate(45)">
+        <rect x="-24" y="-24" width="48" height="48" rx="3" fill="#0f172a" stroke="#475569" stroke-width="1.2"/>
+        <circle cx="-16" cy="-16" r="2.5" fill="#64748b"/>
+        <text x="0" y="-3" fill="#94a3b8" font-size="7" font-family="monospace" text-anchor="middle">ATMEGA</text>
+        <text x="0" y="7" fill="#e2e8f0" font-size="7.5" font-family="monospace" font-weight="700" text-anchor="middle">328P</text>
+      </g>
+
+      <!-- Botón RESET blanco en el centro del Nano -->
+      <rect x="61" y="205" width="28" height="22" rx="3" fill="#e2e8f0" stroke="#64748b" stroke-width="1.2"/>
+      <circle cx="75" cy="216" r="6.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="75" y="240" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">ARDUINO NANO</text>
+
+      <!-- LEDs de estado del Nano (TX, RX, PWR, L) -->
+      <rect x="52" y="255" width="8" height="5" fill="#22c55e"/>
+      <rect x="65" y="255" width="8" height="5" fill="#ef4444"/>
+      <rect x="78" y="255" width="8" height="5" fill="#f59e0b"/>
+      <rect x="91" y="255" width="8" height="5" fill="#3b82f6"/>
+
+      <!-- Conector ICSP 2x3 abajo -->
+      <rect x="60" y="310" width="30" height="20" rx="2" fill="#090d16" stroke="#334155"/>
+    </g>
+
+    <!-- ================================================================= -->
+    <!-- COLUMNA DERECHA DE PEINES DIGITALES (D12, D11, D10, D9, D8)       -->
+    <!-- Orden real en la GBK IoT Shield: [SEÑAL (adentro) | +5V | GND]    -->
+    <!-- ================================================================= -->
+    <text x="382" y="42" fill="#fde047" font-size="11" font-weight="800" text-anchor="middle">PEINES SERVOS (D12..D8)</text>
+    <text x="356" y="60" fill="#fde047" font-size="10" font-family="monospace" font-weight="700" text-anchor="middle">S</text>
+    <text x="382" y="60" fill="#f87171" font-size="10" font-family="monospace" font-weight="700" text-anchor="middle">+5V</text>
+    <text x="408" y="60" fill="#cbd5e1" font-size="10" font-family="monospace" font-weight="700" text-anchor="middle">GND</text>
+
+    <!-- D12 (Libre) - Y=80 -->
+    <g transform="translate(356, 80)">
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="-16" y="4" fill="#94a3b8" font-size="11" font-weight="700" text-anchor="end">D12</text>
+    </g>
+
+    <!-- D11 (4. Pinza) - Y=135 -->
+    <g transform="translate(356, 135)">
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827" stroke="#ef4444" stroke-width="1.2"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="-16" y="4" fill="#fca5a5" font-size="12" font-weight="800" text-anchor="end">D11</text>
+    </g>
+
+    <!-- D10 (3. Codo) - Y=190 -->
+    <g transform="translate(356, 190)">
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827" stroke="#f59e0b" stroke-width="1.2"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="-16" y="4" fill="#fde047" font-size="12" font-weight="800" text-anchor="end">D10</text>
+    </g>
+
+    <!-- D9 (2. Hombro) - Y=245 -->
+    <g transform="translate(356, 245)">
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827" stroke="#10b981" stroke-width="1.2"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="-16" y="4" fill="#6ee7b7" font-size="12" font-weight="800" text-anchor="end">D9</text>
+    </g>
+
+    <!-- D8 (1. Base) - Y=300 -->
+    <g transform="translate(356, 300)">
+      <rect x="-10" y="-10" width="72" height="20" rx="2" fill="#111827" stroke="#3b82f6" stroke-width="1.2"/>
+      <use href="#goldPin" x="0" y="0"/><use href="#goldPin" x="26" y="0"/><use href="#goldPin" x="52" y="0"/>
+      <text x="-16" y="4" fill="#93c5fd" font-size="12" font-weight="800" text-anchor="end">D8</text>
+      <!-- Serigrafía inferior idéntica a la foto real -->
+      <text x="0" y="24" fill="#fde047" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">D8</text>
+      <text x="26" y="24" fill="#f87171" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">+5V</text>
+      <text x="52" y="24" fill="#cbd5e1" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">GND</text>
+    </g>
+
+    <!-- ================================================================= -->
+    <!-- SECCIÓN INFERIOR DEL SHIELD GBK: BORNERA +9V/GND, ESP-01, C1/C2   -->
+    <!-- ================================================================= -->
+    <!-- Bornera Azul +9V / GND abajo a la izquierda -->
+    <g transform="translate(46, 495)">
+      <rect x="0" y="0" width="64" height="92" rx="4" fill="#1d4ed8" stroke="#93c5fd" stroke-width="1.5"/>
+      <circle cx="32" cy="24" r="13" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+      <line x1="22" y1="24" x2="42" y2="24" stroke="#334155" stroke-width="3"/>
+      <circle cx="32" cy="68" r="13" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+      <line x1="22" y1="68" x2="42" y2="68" stroke="#334155" stroke-width="3"/>
+      <text x="-8" y="28" fill="#f87171" font-size="12" font-weight="800" text-anchor="end">+9V</text>
+      <text x="-8" y="73" fill="#cbd5e1" font-size="12" font-weight="800" text-anchor="end">GND</text>
+    </g>
+
+    <!-- Diodo D1, Regulador IC1 y Zener junto a la bornera -->
+    <rect x="92" y="452" width="38" height="16" rx="2" fill="#0f172a" stroke="#94a3b8"/>
+    <rect x="120" y="452" width="6" height="16" fill="#cbd5e1"/>
+    <text x="111" y="482" fill="#cbd5e1" font-size="10" text-anchor="middle">D1</text>
+    <rect x="132" y="510" width="42" height="65" rx="2" fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+    <text x="153" y="502" fill="#cbd5e1" font-size="10" text-anchor="middle">IC1</text>
+
+    <!-- Zócalo ESP-01 en el centro inferior -->
+    <g transform="translate(195, 420)">
+      <rect x="0" y="0" width="115" height="165" rx="4" fill="#111827" stroke="#475569" stroke-width="1.5"/>
+      <rect x="12" y="12" width="91" height="65" rx="3" fill="#1e293b"/>
+      <text x="57" y="46" fill="#94a3b8" font-size="11.5" font-weight="700" text-anchor="middle">MÓDULO</text>
+      <text x="57" y="62" fill="#60a5fa" font-size="11.5" font-weight="700" text-anchor="middle">ESP-01 (Wi-Fi)</text>
+      <!-- Antena PCB dorada del ESP-01 -->
+      <path d="M 22 145 L 22 115 L 36 115 L 36 145 L 50 145 L 50 115 L 64 115 L 64 145 L 78 145 L 78 115 L 92 115" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+      <text x="57" y="186" fill="#e2e8f0" font-size="17" font-weight="700" text-anchor="middle">ESP-01</text>
+    </g>
+
+    <!-- Capacitores electrolíticos C1/C2 y LED1 verde a la derecha inferior -->
+    <circle cx="362" cy="438" r="20" fill="#1e293b" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M 350 426 L 374 450 M 374 426 L 350 450" stroke="#64748b" stroke-width="1.5"/>
+    <text x="362" y="472" fill="#cbd5e1" font-size="10" text-anchor="middle">C1</text>
+
+    <circle cx="395" cy="505" r="20" fill="#1e293b" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M 383 493 L 407 517 M 407 493 L 383 517" stroke="#64748b" stroke-width="1.5"/>
+    <text x="395" y="539" fill="#cbd5e1" font-size="10" text-anchor="middle">C2</text>
+
+    <!-- LED Verde de encendido LED1 -->
+    <circle cx="425" cy="515" r="9" fill="#22c55e" stroke="#bbf7d0" stroke-width="2"/>
+    <text x="425" y="536" fill="#86efac" font-size="10" font-weight="700" text-anchor="middle">LED1</text>
+  </g>
+
+  <!-- ===================================================================== -->
+  <!-- 2. LOS 4 MICRO-SERVOS SG90 DE 180° A LA DERECHA (D11, D10, D9, D8)    -->
+  <!-- ===================================================================== -->
+  <!-- Coordenadas globales de los pines en la GBK Shield (translate(205,130) + translate(356, Y)):
+       Pin S (adentro)   = X: 205 + 356 + 0  = 561
+       Pin +5V (centro)  = X: 205 + 356 + 26 = 587
+       Pin GND (afuera)  = X: 205 + 356 + 52 = 613
+       Alturas Y globales:
+       D11 (4. Pinza):  Y = 130 + 135 = 265
+       D10 (3. Codo):   Y = 130 + 190 = 320
+       D9  (2. Hombro): Y = 130 + 245 = 375
+       D8  (1. Base):   Y = 130 + 300 = 430
+  -->
+
+  <!-- CABLES DE LOS 4 SERVOS (3 hilos por servo: Señal, +5V Rojo, GND Marrón) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- SERVO 4: PINZA (D11 -> Y=265 hacia ficha en X=890, Y=190..214) -->
+    <path d="M 613 265 L 745 265 L 745 214 L 890 214" stroke="#78350f" stroke-width="4.5"/>
+    <path d="M 587 265 L 730 265 L 730 202 L 890 202" stroke="#ef4444" stroke-width="4.5"/>
+    <path d="M 561 265 L 715 265 L 715 190 L 890 190" stroke="#f97316" stroke-width="4.5"/>
+
+    <!-- SERVO 3: CODO (D10 -> Y=320 hacia ficha en X=890, Y=355..379) -->
+    <path d="M 613 320 L 790 320 L 790 379 L 890 379" stroke="#78350f" stroke-width="4.5"/>
+    <path d="M 587 320 L 805 320 L 805 367 L 890 367" stroke="#ef4444" stroke-width="4.5"/>
+    <path d="M 561 320 L 820 320 L 820 355 L 890 355" stroke="#facc15" stroke-width="4.5"/>
+
+    <!-- SERVO 2: HOMBRO (D9 -> Y=375 hacia ficha en X=890, Y=520..544) -->
+    <path d="M 613 375 L 750 375 L 750 544 L 890 544" stroke="#78350f" stroke-width="4.5"/>
+    <path d="M 587 375 L 765 375 L 765 532 L 890 532" stroke="#ef4444" stroke-width="4.5"/>
+    <path d="M 561 375 L 780 375 L 780 520 L 890 520" stroke="#34d399" stroke-width="4.5"/>
+
+    <!-- SERVO 1: BASE (D8 -> Y=430 hacia ficha en X=890, Y=685..709) -->
+    <path d="M 613 430 L 700 430 L 700 709 L 890 709" stroke="#78350f" stroke-width="4.5"/>
+    <path d="M 587 430 L 715 430 L 715 697 L 890 697" stroke="#ef4444" stroke-width="4.5"/>
+    <path d="M 561 430 L 730 430 L 730 685 L 890 685" stroke="#60a5fa" stroke-width="4.5"/>
+  </g>
+
+  <!-- BLOQUES DE LOS 4 SERVOS SG90 CON FICHA DUPONT Y ETIQUETAS LIMPIAS -->
+  
+  <g transform="translate(890, 136)" filter="url(#cardShadow)">
+    <!-- Etiqueta limpia encima de la ficha Dupont (sin cruzar los cables) -->
+    <rect x="-112" y="12" width="106" height="32" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="-59" y="25" fill="#ef4444" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">S (D11): Naranja</text>
+    <text x="-59" y="38" fill="#cbd5e1" font-size="9" font-family="monospace" text-anchor="middle"><tspan fill="#f87171">+5V: Rojo</tspan> | <tspan fill="#d97706">GND</tspan></text>
+
+    <!-- Ficha hembra Dupont de 3 pines del servo -->
+    <rect x="-12" y="46" width="22" height="40" rx="3" fill="#111827" stroke="#64748b" stroke-width="1.2"/>
+    <circle cx="-4" cy="54" r="2.2" fill="#ef4444"/>
+    <circle cx="-4" cy="66" r="2.2" fill="#ef4444"/>
+    <circle cx="-4" cy="78" r="2.2" fill="#b45309"/>
+
+    <!-- Tarjeta contenedora del Servo -->
+    <rect x="10" y="0" width="470" height="122" rx="12" fill="#162032" stroke="#ef4444" stroke-width="2"/>
+
+    <!-- Ilustración del Micro-Servo SG90 Azul -->
+    <g transform="translate(30, 22)">
+      <!-- Orejas / pestañas laterales del SG90 -->
+      <rect x="-10" y="24" width="136" height="12" rx="2" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1"/>
+      <!-- Cuerpo traslúcido azul del SG90 -->
+      <rect x="4" y="4" width="108" height="70" rx="5" fill="url(#sg90Grad)" stroke="#93c5fd" stroke-width="1.5"/>
+      <!-- Etiqueta dorada TowerPro SG90 -->
+      <rect x="14" y="16" width="88" height="46" rx="3" fill="#b45309" stroke="#fde047" stroke-width="1"/>
+      <text x="58" y="34" fill="#fef08a" font-size="11" font-weight="800" text-anchor="middle">TowerPro</text>
+      <text x="58" y="48" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">Micro Servo 9g</text>
+      <text x="58" y="59" fill="#fde047" font-size="8.5" font-family="monospace" text-anchor="middle">SG90 • 180°</text>
+      <!-- Eje y brazo (horn) blanco del servo -->
+      <circle cx="30" cy="4" r="14" fill="#1e40af" stroke="#93c5fd" stroke-width="1.2"/>
+      <rect x="10" y="-10" width="62" height="12" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="30" cy="-4" r="4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+      <circle cx="46" cy="-4" r="2" fill="#475569"/>
+      <circle cx="56" cy="-4" r="2" fill="#475569"/>
+      <circle cx="65" cy="-4" r="2" fill="#475569"/>
+    </g>
+
+    <!-- Datos técnicos del eje a la derecha del servo -->
+    <text x="182" y="34" fill="#f8fafc" font-size="16" font-weight="800">4. Servo Pinza (Gripper)</text>
+    <rect x="182" y="44" width="235" height="24" rx="5" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+    <text x="192" y="60" fill="#ef4444" font-size="12" font-family="monospace" font-weight="700">Pin Shield: D11  |  Índice: S3</text>
+    <text x="182" y="88" fill="#cbd5e1" font-size="12.5">• Rango firmware: <tspan fill="#f8fafc" font-weight="700">10° a 170°</tspan></text>
+    <text x="182" y="107" fill="#94a3b8" font-size="12">• Función: Apertura y cierre de dedos</text>
+  </g>
+  
+  <g transform="translate(890, 301)" filter="url(#cardShadow)">
+    <!-- Etiqueta limpia encima de la ficha Dupont (sin cruzar los cables) -->
+    <rect x="-112" y="12" width="106" height="32" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="-59" y="25" fill="#facc15" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">S (D10): Naranja</text>
+    <text x="-59" y="38" fill="#cbd5e1" font-size="9" font-family="monospace" text-anchor="middle"><tspan fill="#f87171">+5V: Rojo</tspan> | <tspan fill="#d97706">GND</tspan></text>
+
+    <!-- Ficha hembra Dupont de 3 pines del servo -->
+    <rect x="-12" y="46" width="22" height="40" rx="3" fill="#111827" stroke="#64748b" stroke-width="1.2"/>
+    <circle cx="-4" cy="54" r="2.2" fill="#facc15"/>
+    <circle cx="-4" cy="66" r="2.2" fill="#ef4444"/>
+    <circle cx="-4" cy="78" r="2.2" fill="#b45309"/>
+
+    <!-- Tarjeta contenedora del Servo -->
+    <rect x="10" y="0" width="470" height="122" rx="12" fill="#162032" stroke="#facc15" stroke-width="2"/>
+
+    <!-- Ilustración del Micro-Servo SG90 Azul -->
+    <g transform="translate(30, 22)">
+      <!-- Orejas / pestañas laterales del SG90 -->
+      <rect x="-10" y="24" width="136" height="12" rx="2" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1"/>
+      <!-- Cuerpo traslúcido azul del SG90 -->
+      <rect x="4" y="4" width="108" height="70" rx="5" fill="url(#sg90Grad)" stroke="#93c5fd" stroke-width="1.5"/>
+      <!-- Etiqueta dorada TowerPro SG90 -->
+      <rect x="14" y="16" width="88" height="46" rx="3" fill="#b45309" stroke="#fde047" stroke-width="1"/>
+      <text x="58" y="34" fill="#fef08a" font-size="11" font-weight="800" text-anchor="middle">TowerPro</text>
+      <text x="58" y="48" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">Micro Servo 9g</text>
+      <text x="58" y="59" fill="#fde047" font-size="8.5" font-family="monospace" text-anchor="middle">SG90 • 180°</text>
+      <!-- Eje y brazo (horn) blanco del servo -->
+      <circle cx="30" cy="4" r="14" fill="#1e40af" stroke="#93c5fd" stroke-width="1.2"/>
+      <rect x="10" y="-10" width="62" height="12" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="30" cy="-4" r="4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+      <circle cx="46" cy="-4" r="2" fill="#475569"/>
+      <circle cx="56" cy="-4" r="2" fill="#475569"/>
+      <circle cx="65" cy="-4" r="2" fill="#475569"/>
+    </g>
+
+    <!-- Datos técnicos del eje a la derecha del servo -->
+    <text x="182" y="34" fill="#f8fafc" font-size="16" font-weight="800">3. Servo Codo (Arriba/Abajo)</text>
+    <rect x="182" y="44" width="235" height="24" rx="5" fill="#0f172a" stroke="#facc15" stroke-width="1"/>
+    <text x="192" y="60" fill="#facc15" font-size="12" font-family="monospace" font-weight="700">Pin Shield: D10  |  Índice: S2</text>
+    <text x="182" y="88" fill="#cbd5e1" font-size="12.5">• Rango firmware: <tspan fill="#f8fafc" font-weight="700">10° a 170°</tspan></text>
+    <text x="182" y="107" fill="#94a3b8" font-size="12">• Función: Palanca vertical trasera (002)</text>
+  </g>
+  
+  <g transform="translate(890, 466)" filter="url(#cardShadow)">
+    <!-- Etiqueta limpia encima de la ficha Dupont (sin cruzar los cables) -->
+    <rect x="-112" y="12" width="106" height="32" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="-59" y="25" fill="#34d399" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">S (D9): Naranja</text>
+    <text x="-59" y="38" fill="#cbd5e1" font-size="9" font-family="monospace" text-anchor="middle"><tspan fill="#f87171">+5V: Rojo</tspan> | <tspan fill="#d97706">GND</tspan></text>
+
+    <!-- Ficha hembra Dupont de 3 pines del servo -->
+    <rect x="-12" y="46" width="22" height="40" rx="3" fill="#111827" stroke="#64748b" stroke-width="1.2"/>
+    <circle cx="-4" cy="54" r="2.2" fill="#34d399"/>
+    <circle cx="-4" cy="66" r="2.2" fill="#ef4444"/>
+    <circle cx="-4" cy="78" r="2.2" fill="#b45309"/>
+
+    <!-- Tarjeta contenedora del Servo -->
+    <rect x="10" y="0" width="470" height="122" rx="12" fill="#162032" stroke="#34d399" stroke-width="2"/>
+
+    <!-- Ilustración del Micro-Servo SG90 Azul -->
+    <g transform="translate(30, 22)">
+      <!-- Orejas / pestañas laterales del SG90 -->
+      <rect x="-10" y="24" width="136" height="12" rx="2" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1"/>
+      <!-- Cuerpo traslúcido azul del SG90 -->
+      <rect x="4" y="4" width="108" height="70" rx="5" fill="url(#sg90Grad)" stroke="#93c5fd" stroke-width="1.5"/>
+      <!-- Etiqueta dorada TowerPro SG90 -->
+      <rect x="14" y="16" width="88" height="46" rx="3" fill="#b45309" stroke="#fde047" stroke-width="1"/>
+      <text x="58" y="34" fill="#fef08a" font-size="11" font-weight="800" text-anchor="middle">TowerPro</text>
+      <text x="58" y="48" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">Micro Servo 9g</text>
+      <text x="58" y="59" fill="#fde047" font-size="8.5" font-family="monospace" text-anchor="middle">SG90 • 180°</text>
+      <!-- Eje y brazo (horn) blanco del servo -->
+      <circle cx="30" cy="4" r="14" fill="#1e40af" stroke="#93c5fd" stroke-width="1.2"/>
+      <rect x="10" y="-10" width="62" height="12" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="30" cy="-4" r="4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+      <circle cx="46" cy="-4" r="2" fill="#475569"/>
+      <circle cx="56" cy="-4" r="2" fill="#475569"/>
+      <circle cx="65" cy="-4" r="2" fill="#475569"/>
+    </g>
+
+    <!-- Datos técnicos del eje a la derecha del servo -->
+    <text x="182" y="34" fill="#f8fafc" font-size="16" font-weight="800">2. Servo Hombro (Adelante/Atrás)</text>
+    <rect x="182" y="44" width="235" height="24" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+    <text x="192" y="60" fill="#34d399" font-size="12" font-family="monospace" font-weight="700">Pin Shield: D9  |  Índice: S1</text>
+    <text x="182" y="88" fill="#cbd5e1" font-size="12.5">• Rango firmware: <tspan fill="#f8fafc" font-weight="700">10° a 170°</tspan></text>
+    <text x="182" y="107" fill="#94a3b8" font-size="12">• Función: Brazo impulsor principal (004)</text>
+  </g>
+  
+  <g transform="translate(890, 631)" filter="url(#cardShadow)">
+    <!-- Etiqueta limpia encima de la ficha Dupont (sin cruzar los cables) -->
+    <rect x="-112" y="12" width="106" height="32" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+    <text x="-59" y="25" fill="#60a5fa" font-size="9.5" font-family="monospace" font-weight="700" text-anchor="middle">S (D8): Naranja</text>
+    <text x="-59" y="38" fill="#cbd5e1" font-size="9" font-family="monospace" text-anchor="middle"><tspan fill="#f87171">+5V: Rojo</tspan> | <tspan fill="#d97706">GND</tspan></text>
+
+    <!-- Ficha hembra Dupont de 3 pines del servo -->
+    <rect x="-12" y="46" width="22" height="40" rx="3" fill="#111827" stroke="#64748b" stroke-width="1.2"/>
+    <circle cx="-4" cy="54" r="2.2" fill="#60a5fa"/>
+    <circle cx="-4" cy="66" r="2.2" fill="#ef4444"/>
+    <circle cx="-4" cy="78" r="2.2" fill="#b45309"/>
+
+    <!-- Tarjeta contenedora del Servo -->
+    <rect x="10" y="0" width="470" height="122" rx="12" fill="#162032" stroke="#60a5fa" stroke-width="2"/>
+
+    <!-- Ilustración del Micro-Servo SG90 Azul -->
+    <g transform="translate(30, 22)">
+      <!-- Orejas / pestañas laterales del SG90 -->
+      <rect x="-10" y="24" width="136" height="12" rx="2" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1"/>
+      <!-- Cuerpo traslúcido azul del SG90 -->
+      <rect x="4" y="4" width="108" height="70" rx="5" fill="url(#sg90Grad)" stroke="#93c5fd" stroke-width="1.5"/>
+      <!-- Etiqueta dorada TowerPro SG90 -->
+      <rect x="14" y="16" width="88" height="46" rx="3" fill="#b45309" stroke="#fde047" stroke-width="1"/>
+      <text x="58" y="34" fill="#fef08a" font-size="11" font-weight="800" text-anchor="middle">TowerPro</text>
+      <text x="58" y="48" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">Micro Servo 9g</text>
+      <text x="58" y="59" fill="#fde047" font-size="8.5" font-family="monospace" text-anchor="middle">SG90 • 180°</text>
+      <!-- Eje y brazo (horn) blanco del servo -->
+      <circle cx="30" cy="4" r="14" fill="#1e40af" stroke="#93c5fd" stroke-width="1.2"/>
+      <rect x="10" y="-10" width="62" height="12" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="30" cy="-4" r="4" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+      <circle cx="46" cy="-4" r="2" fill="#475569"/>
+      <circle cx="56" cy="-4" r="2" fill="#475569"/>
+      <circle cx="65" cy="-4" r="2" fill="#475569"/>
+    </g>
+
+    <!-- Datos técnicos del eje a la derecha del servo -->
+    <text x="182" y="34" fill="#f8fafc" font-size="16" font-weight="800">1. Servo Base (Giro Horizontal)</text>
+    <rect x="182" y="44" width="235" height="24" rx="5" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+    <text x="192" y="60" fill="#60a5fa" font-size="12" font-family="monospace" font-weight="700">Pin Shield: D8  |  Índice: S0</text>
+    <text x="182" y="88" fill="#cbd5e1" font-size="12.5">• Rango firmware: <tspan fill="#f8fafc" font-weight="700">0° a 180°</tspan></text>
+    <text x="182" y="107" fill="#94a3b8" font-size="12">• Función: Rotación de torreta principal</text>
+  </g>
+
+  <!-- ===================================================================== -->
+  <!-- 3. BLOQUE DE ALIMENTACIÓN Y CABLE USB (ABAJO A LA IZQUIERDA)          -->
+  <!-- ===================================================================== -->
+  <!-- Cable USB hacia la PC (Web Serial 115200 baudios) -->
+  <path d="M 435 112 L 435 96 L 109 96 L 109 245" fill="none" stroke="#38bdf8" stroke-width="5" stroke-dasharray="10,5" stroke-linecap="round"/>
+  <g transform="translate(28, 245)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="155" height="125" rx="10" fill="#162032" stroke="#38bdf8" stroke-width="1.8"/>
+    <text x="77" y="28" fill="#38bdf8" font-size="13.5" font-weight="800" text-anchor="middle">💻 PC / Navegador</text>
+    <text x="77" y="48" fill="#e2e8f0" font-size="11.5" text-anchor="middle">Cable Mini-USB</text>
+    <text x="77" y="68" fill="#94a3b8" font-size="11" font-family="monospace" text-anchor="middle">Web Serial API</text>
+    <text x="77" y="86" fill="#fde047" font-size="11" font-family="monospace" font-weight="700" text-anchor="middle">115200 baudios</text>
+    <text x="77" y="108" fill="#cbd5e1" font-size="10.5" text-anchor="middle">panel_control.html</text>
+  </g>
+
+  <!-- Fuente Externa Opcional hacia la bornera +9V / GND -->
+  <path d="M 183 650 L 251 650" fill="none" stroke="#ef4444" stroke-width="4.5"/>
+  <path d="M 183 694 L 251 694" fill="none" stroke="#64748b" stroke-width="4.5"/>
+  <g transform="translate(28, 610)" filter="url(#cardShadow)">
+    <rect x="0" y="0" width="155" height="120" rx="10" fill="#162032" stroke="#f59e0b" stroke-width="1.8"/>
+    <text x="77" y="26" fill="#fbbf24" font-size="13.5" font-weight="800" text-anchor="middle">🔋 Fuente DC</text>
+    <text x="77" y="45" fill="#e2e8f0" font-size="11" text-anchor="middle">Bornera Azul GBK</text>
+    <text x="77" y="66" fill="#f87171" font-size="10.5" font-family="monospace" font-weight="700" text-anchor="middle">Sup: +7V a +9V</text>
+    <text x="77" y="84" fill="#cbd5e1" font-size="10.5" font-family="monospace" font-weight="700" text-anchor="middle">Inf: GND (-)</text>
+    <text x="77" y="105" fill="#94a3b8" font-size="10" text-anchor="middle">Regulador 5V en placa</text>
+  </g>
+
+  <!-- PIE DE PÁGINA CON LEYENDA DE SEGURIDAD DE CONEXIÓN -->
+  <rect x="28" y="810" width="1344" height="106" rx="12" fill="#162032" stroke="#2e3f59" stroke-width="1.5" filter="url(#cardShadow)"/>
+  <text x="52" y="840" fill="#fde047" font-size="15" font-weight="800">⚠️ GUÍA RÁPIDA DE ENCHUFE EN LA PLACA GBK IOT SHIELD REV. 1.0:</text>
+  <text x="52" y="865" fill="#e2e8f0" font-size="13.5">1. En la columna derecha del shield (<tspan fill="#60a5fa" font-weight="700">D8, D9, D10, D11</tspan>), el pin <tspan fill="#fde047" font-weight="700">MÁS INTERNO (pegado al Arduino Nano)</tspan> es la <tspan fill="#fde047" font-weight="700">Señal (S)</tspan>, el del <tspan fill="#f87171" font-weight="700">CENTRO es +5V</tspan> y el <tspan fill="#cbd5e1" font-weight="700">EXTERNO (borde derecho) es GND</tspan>.</text>
+  <text x="52" y="890" fill="#e2e8f0" font-size="13.5">2. Enchufá cada ficha de servo con el <tspan fill="#f97316" font-weight="700">cable Naranja/Amarillo mirando hacia adentro (hacia el Nano)</tspan> y el <tspan fill="#d97706" font-weight="700">cable Marrón/Negro mirando hacia el borde exterior de la placa</tspan>.</text>
+</svg>

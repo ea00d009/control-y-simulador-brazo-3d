@@ -1,0 +1,268 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 820" width="1300" height="820" font-family="Consolas, Courier New, monospace">
+  <rect width="1300" height="820" fill="#ffffff"/>
+  <!-- Marco de plano técnico con rótulo normalizado -->
+  <rect x="20" y="20" width="1260" height="780" fill="none" stroke="#0f172a" stroke-width="3"/>
+  <rect x="28" y="28" width="1244" height="764" fill="none" stroke="#0f172a" stroke-width="1"/>
+
+  <!-- Grilla de referencias en el marco -->
+  <g font-size="12" fill="#475569" text-anchor="middle">
+    <text x="220" y="16">1</text><text x="450" y="16">2</text><text x="680" y="16">3</text><text x="910" y="16">4</text><text x="1140" y="16">5</text>
+    <text x="12" y="160">A</text><text x="12" y="340">B</text><text x="12" y="520">C</text><text x="12" y="700">D</text>
+  </g>
+
+  <!-- ==================== ETAPA 1: ALIMENTACIÓN GBK IOT SHIELD ==================== -->
+  <rect x="55" y="55" width="490" height="260" rx="6" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="70" y="80" fill="#0f172a" font-size="15" font-weight="700">ETAPA DE POTENCIA — GBK IOT SHIELD REV. 1.0</text>
+
+  <!-- Bornera J1 (+9V / GND) -->
+  <rect x="75" y="115" width="60" height="90" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <circle cx="105" cy="140" r="7" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+  <circle cx="105" cy="180" r="7" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+  <text x="105" y="105" fill="#0f172a" font-size="13" font-weight="700" text-anchor="middle">J1 (BORNERA)</text>
+  <text x="90" y="144" fill="#dc2626" font-size="11" font-weight="700" text-anchor="end">+9V</text>
+  <text x="90" y="184" fill="#0f172a" font-size="11" font-weight="700" text-anchor="end">GND</text>
+
+  <!-- Diodo D1 (1N4007) -->
+  <line x1="112" y1="140" x2="175" y2="140" stroke="#0f172a" stroke-width="2"/>
+  <polygon points="175,128 175,152 200,140" fill="#0f172a"/>
+  <line x1="200" y1="126" x2="200" y2="154" stroke="#0f172a" stroke-width="3"/>
+  <text x="188" y="118" fill="#0f172a" font-size="12" font-weight="700" text-anchor="middle">D1 (1N4007)</text>
+
+  <!-- Regulador IC1 (+5V) -->
+  <line x1="200" y1="140" x2="245" y2="140" stroke="#0f172a" stroke-width="2"/>
+  <rect x="245" y="115" width="95" height="55" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="292" y="138" fill="#0f172a" font-size="12" font-weight="700" text-anchor="middle">IC1 (REG 5V)</text>
+  <text x="253" y="152" fill="#475569" font-size="10">IN</text>
+  <text x="330" y="152" fill="#475569" font-size="10" text-anchor="end">OUT</text>
+  <text x="292" y="165" fill="#475569" font-size="10" text-anchor="middle">GND</text>
+  <line x1="292" y1="170" x2="292" y2="250" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Línea +5V regulada + Capacitores C1, C2 + LED1 -->
+  <line x1="340" y1="140" x2="520" y2="140" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="515" y="130" fill="#dc2626" font-size="14" font-weight="700" text-anchor="end">BUS +5V (VCC SERVOS)</text>
+
+  <!-- Capacitor C1 -->
+  <line x1="380" y1="140" x2="380" y2="185" stroke="#0f172a" stroke-width="2"/>
+  <line x1="366" y1="185" x2="394" y2="185" stroke="#0f172a" stroke-width="3"/>
+  <line x1="366" y1="195" x2="394" y2="195" stroke="#0f172a" stroke-width="3"/>
+  <line x1="380" y1="195" x2="380" y2="250" stroke="#0f172a" stroke-width="2"/>
+  <text x="400" y="194" fill="#0f172a" font-size="11" font-weight="700">C1</text>
+
+  <!-- Capacitor C2 -->
+  <line x1="440" y1="140" x2="440" y2="185" stroke="#0f172a" stroke-width="2"/>
+  <line x1="426" y1="185" x2="454" y2="185" stroke="#0f172a" stroke-width="3"/>
+  <line x1="426" y1="195" x2="454" y2="195" stroke="#0f172a" stroke-width="3"/>
+  <line x1="440" y1="195" x2="440" y2="250" stroke="#0f172a" stroke-width="2"/>
+  <text x="460" y="194" fill="#0f172a" font-size="11" font-weight="700">C2</text>
+
+  <!-- Rama LED1 indicador -->
+  <line x1="500" y1="140" x2="500" y2="165" stroke="#0f172a" stroke-width="2"/>
+  <rect x="493" y="165" width="14" height="30" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text x="514" y="184" fill="#0f172a" font-size="10">R1</text>
+  <polygon points="490,205 510,205 500,222" fill="#16a34a" stroke="#0f172a" stroke-width="1.5"/>
+  <line x1="490" y1="222" x2="510" y2="222" stroke="#0f172a" stroke-width="2"/>
+  <line x1="500" y1="222" x2="500" y2="250" stroke="#0f172a" stroke-width="2"/>
+  <text x="516" y="218" fill="#16a34a" font-size="11" font-weight="700">LED1</text>
+
+  <!-- Bus GND Etapa 1 -->
+  <line x1="112" y1="180" x2="145" y2="180" stroke="#0f172a" stroke-width="2"/>
+  <line x1="145" y1="180" x2="145" y2="250" stroke="#0f172a" stroke-width="2"/>
+  <line x1="145" y1="250" x2="520" y2="250" stroke="#0f172a" stroke-width="2.5"/>
+  <!-- Símbolo de Tierra (GND) -->
+  <line x1="292" y1="250" x2="292" y2="270" stroke="#0f172a" stroke-width="2"/>
+  <line x1="274" y1="270" x2="310" y2="270" stroke="#0f172a" stroke-width="2.5"/>
+  <line x1="280" y1="277" x2="304" y2="277" stroke="#0f172a" stroke-width="2.5"/>
+  <line x1="286" y1="284" x2="298" y2="284" stroke="#0f172a" stroke-width="2.5"/>
+  <text x="292" y="302" fill="#0f172a" font-size="12" font-weight="700" text-anchor="middle">GND COMÚN</text>
+
+  <!-- ==================== ETAPA 2: MICROCONTROLADOR ARDUINO NANO ==================== -->
+  <rect x="115" y="360" width="360" height="380" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+  <text x="295" y="392" fill="#1e3a8a" font-size="17" font-weight="700" text-anchor="middle">U1: ARDUINO NANO</text>
+  <text x="295" y="412" fill="#475569" font-size="12" text-anchor="middle">ATmega328P (Old Bootloader)</text>
+  <line x1="115" y1="425" x2="475" y2="425" stroke="#93c5fd" stroke-width="1.5"/>
+
+  <!-- Puerto Mini-USB a la izquierda de U1 -->
+  <rect x="55" y="455" width="60" height="55" fill="#f1f5f9" stroke="#0f172a" stroke-width="2"/>
+  <text x="85" y="478" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">MINI</text>
+  <text x="85" y="495" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">USB</text>
+  <text x="130" y="480" fill="#0f172a" font-size="12" font-weight="700">UART (TX/RX)</text>
+  <text x="130" y="497" fill="#475569" font-size="11">115200 baud (Web Serial)</text>
+
+  <!-- Alimentación de U1 (+5V y GND) -->
+  <text x="130" y="575" fill="#dc2626" font-size="13" font-weight="700">Pin 27 (+5V)</text>
+  <line x1="85" y1="570" x2="115" y2="570" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="85" cy="570" r="5" fill="#dc2626"/>
+  <text x="72" y="574" fill="#dc2626" font-size="12" font-weight="700" text-anchor="end">+5V</text>
+
+  <text x="130" y="625" fill="#0f172a" font-size="13" font-weight="700">Pin 29 (GND)</text>
+  <line x1="85" y1="620" x2="115" y2="620" stroke="#0f172a" stroke-width="2"/>
+  <line x1="85" y1="620" x2="85" y2="645" stroke="#0f172a" stroke-width="2"/>
+  <line x1="70" y1="645" x2="100" y2="645" stroke="#0f172a" stroke-width="2.5"/>
+  <line x1="75" y1="652" x2="95" y2="652" stroke="#0f172a" stroke-width="2.5"/>
+  <line x1="80" y1="659" x2="90" y2="659" stroke="#0f172a" stroke-width="2.5"/>
+
+  <!-- Memoria EEPROM Interna -->
+  <rect x="145" y="665" width="300" height="52" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="295" y="686" fill="#1e3a8a" font-size="12" font-weight="700" text-anchor="middle">MEMORIA EEPROM INTERNA (1 KB)</text>
+  <text x="295" y="704" fill="#1e40af" font-size="11" text-anchor="middle">Addr 0x00..0x09: Magic(0xEA) + Speed + Min/Max</text>
+
+  <!-- Salidas PWM en el lado derecho de U1 (D11, D10, D9, D8) -->
+  <text x="460" y="465" fill="#0f172a" font-size="13" font-weight="700" text-anchor="end">PB3 / D11 (PWM)</text>
+  <text x="460" y="525" fill="#0f172a" font-size="13" font-weight="700" text-anchor="end">PB2 / D10 (PWM)</text>
+  <text x="460" y="585" fill="#0f172a" font-size="13" font-weight="700" text-anchor="end">PB1 / D9  (PWM)</text>
+  <text x="460" y="645" fill="#0f172a" font-size="13" font-weight="700" text-anchor="end">PB0 / D8  (GPIO)</text>
+
+  <!-- ==================== ETAPA 3: BUSES +5V / GND Y 4 SERVOMOTORES SG90 ==================== -->
+  <!-- Bus Vertical +5V (Rojo) en X=680 y Bus Vertical GND (Negro) en X=720 -->
+  <line x1="680" y1="75" x2="680" y2="710" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="680" cy="75" r="6" fill="#dc2626"/>
+  <text x="680" y="60" fill="#dc2626" font-size="13" font-weight="700" text-anchor="middle">+5V (BUS SHIELD)</text>
+
+  <line x1="720" y1="95" x2="720" y2="725" stroke="#0f172a" stroke-width="3"/>
+  <line x1="702" y1="725" x2="738" y2="725" stroke="#0f172a" stroke-width="3"/>
+  <line x1="708" y1="733" x2="732" y2="733" stroke="#0f172a" stroke-width="3"/>
+  <line x1="714" y1="741" x2="726" y2="741" stroke="#0f172a" stroke-width="3"/>
+  <text x="720" y="760" fill="#0f172a" font-size="12.5" font-weight="700" text-anchor="middle">GND</text>
+
+  
+  <!-- BLOQUE ESQUEMÁTICO SERVO 4. PINZA (GRIPPER) (D11) -->
+  <!-- Línea de Señal desde U1 (475, 460) hasta (850, 95) -->
+  <path d="M 475 460 L 565 460 L 565 95 L 850 95" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="573" y="88" fill="#dc2626" font-size="11.5" font-weight="700">SEÑAL D11 (Pin Interno)</text>
+
+  <!-- Derivación de +5V (Centro) desde X=680 hasta (850, 125) -->
+  <circle cx="680" cy="125" r="4.5" fill="#dc2626"/>
+  <line x1="680" y1="125" x2="850" y2="125" stroke="#dc2626" stroke-width="2"/>
+  <text x="765" y="120" fill="#dc2626" font-size="10.5" font-weight="700" text-anchor="middle">+5V (Pin Central)</text>
+
+  <!-- Derivación de GND (Afuera) desde X=720 hasta (850, 155) -->
+  <circle cx="720" cy="155" r="4.5" fill="#0f172a"/>
+  <line x1="720" y1="155" x2="850" y2="155" stroke="#0f172a" stroke-width="2"/>
+  <text x="785" y="150" fill="#0f172a" font-size="10.5" font-weight="700" text-anchor="middle">GND (Pin Externo)</text>
+
+  <!-- Símbolo del Servomotor M4 -->
+  <rect x="850" y="70" width="390" height="110" rx="6" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="932" cy="125" r="31" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="932" y="122" fill="#1e3a8a" font-size="15" font-weight="700" text-anchor="middle">M</text>
+  <text x="932" y="137" fill="#1d4ed8" font-size="10.5" font-weight="700" text-anchor="middle">PWM 50Hz</text>
+
+  <text x="858" y="99" fill="#0f172a" font-size="11" font-weight="700">1: S</text>
+  <text x="858" y="129" fill="#dc2626" font-size="11" font-weight="700">2: V+</text>
+  <text x="858" y="159" fill="#0f172a" font-size="11" font-weight="700">3: G</text>
+
+  <text x="975" y="104" fill="#0f172a" font-size="14" font-weight="700">M4: 4. PINZA (GRIPPER)</text>
+  <text x="975" y="126" fill="#334155" font-size="11.5">Modelo: Micro-Servo SG90 (180°)</text>
+  <text x="975" y="146" fill="#334155" font-size="11.5">Conector: Peine 3P D11 en GBK Shield</text>
+  <text x="975" y="165" fill="#475569" font-size="11">Pulso: 544 µs (0°) a 2400 µs (180°)</text>
+  
+  
+  <!-- BLOQUE ESQUEMÁTICO SERVO 3. CODO (ARRIBA/ABAJO) (D10) -->
+  <!-- Línea de Señal desde U1 (475, 520) hasta (850, 240) -->
+  <path d="M 475 520 L 590 520 L 590 240 L 850 240" fill="none" stroke="#d97706" stroke-width="2.5"/>
+  <text x="598" y="233" fill="#d97706" font-size="11.5" font-weight="700">SEÑAL D10 (Pin Interno)</text>
+
+  <!-- Derivación de +5V (Centro) desde X=680 hasta (850, 270) -->
+  <circle cx="680" cy="270" r="4.5" fill="#dc2626"/>
+  <line x1="680" y1="270" x2="850" y2="270" stroke="#dc2626" stroke-width="2"/>
+  <text x="765" y="265" fill="#dc2626" font-size="10.5" font-weight="700" text-anchor="middle">+5V (Pin Central)</text>
+
+  <!-- Derivación de GND (Afuera) desde X=720 hasta (850, 300) -->
+  <circle cx="720" cy="300" r="4.5" fill="#0f172a"/>
+  <line x1="720" y1="300" x2="850" y2="300" stroke="#0f172a" stroke-width="2"/>
+  <text x="785" y="295" fill="#0f172a" font-size="10.5" font-weight="700" text-anchor="middle">GND (Pin Externo)</text>
+
+  <!-- Símbolo del Servomotor M3 -->
+  <rect x="850" y="215" width="390" height="110" rx="6" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="932" cy="270" r="31" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="932" y="267" fill="#1e3a8a" font-size="15" font-weight="700" text-anchor="middle">M</text>
+  <text x="932" y="282" fill="#1d4ed8" font-size="10.5" font-weight="700" text-anchor="middle">PWM 50Hz</text>
+
+  <text x="858" y="244" fill="#0f172a" font-size="11" font-weight="700">1: S</text>
+  <text x="858" y="274" fill="#dc2626" font-size="11" font-weight="700">2: V+</text>
+  <text x="858" y="304" fill="#0f172a" font-size="11" font-weight="700">3: G</text>
+
+  <text x="975" y="249" fill="#0f172a" font-size="14" font-weight="700">M3: 3. CODO (ARRIBA/ABAJO)</text>
+  <text x="975" y="271" fill="#334155" font-size="11.5">Modelo: Micro-Servo SG90 (180°)</text>
+  <text x="975" y="291" fill="#334155" font-size="11.5">Conector: Peine 3P D10 en GBK Shield</text>
+  <text x="975" y="310" fill="#475569" font-size="11">Pulso: 544 µs (0°) a 2400 µs (180°)</text>
+  
+  
+  <!-- BLOQUE ESQUEMÁTICO SERVO 2. HOMBRO (ADELANTE/ATRÁS) (D9) -->
+  <!-- Línea de Señal desde U1 (475, 580) hasta (850, 385) -->
+  <path d="M 475 580 L 615 580 L 615 385 L 850 385" fill="none" stroke="#059669" stroke-width="2.5"/>
+  <text x="623" y="378" fill="#059669" font-size="11.5" font-weight="700">SEÑAL D9 (Pin Interno)</text>
+
+  <!-- Derivación de +5V (Centro) desde X=680 hasta (850, 415) -->
+  <circle cx="680" cy="415" r="4.5" fill="#dc2626"/>
+  <line x1="680" y1="415" x2="850" y2="415" stroke="#dc2626" stroke-width="2"/>
+  <text x="765" y="410" fill="#dc2626" font-size="10.5" font-weight="700" text-anchor="middle">+5V (Pin Central)</text>
+
+  <!-- Derivación de GND (Afuera) desde X=720 hasta (850, 445) -->
+  <circle cx="720" cy="445" r="4.5" fill="#0f172a"/>
+  <line x1="720" y1="445" x2="850" y2="445" stroke="#0f172a" stroke-width="2"/>
+  <text x="785" y="440" fill="#0f172a" font-size="10.5" font-weight="700" text-anchor="middle">GND (Pin Externo)</text>
+
+  <!-- Símbolo del Servomotor M2 -->
+  <rect x="850" y="360" width="390" height="110" rx="6" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="932" cy="415" r="31" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="932" y="412" fill="#1e3a8a" font-size="15" font-weight="700" text-anchor="middle">M</text>
+  <text x="932" y="427" fill="#1d4ed8" font-size="10.5" font-weight="700" text-anchor="middle">PWM 50Hz</text>
+
+  <text x="858" y="389" fill="#0f172a" font-size="11" font-weight="700">1: S</text>
+  <text x="858" y="419" fill="#dc2626" font-size="11" font-weight="700">2: V+</text>
+  <text x="858" y="449" fill="#0f172a" font-size="11" font-weight="700">3: G</text>
+
+  <text x="975" y="394" fill="#0f172a" font-size="14" font-weight="700">M2: 2. HOMBRO (ADELANTE/ATRÁS)</text>
+  <text x="975" y="416" fill="#334155" font-size="11.5">Modelo: Micro-Servo SG90 (180°)</text>
+  <text x="975" y="436" fill="#334155" font-size="11.5">Conector: Peine 3P D9 en GBK Shield</text>
+  <text x="975" y="455" fill="#475569" font-size="11">Pulso: 544 µs (0°) a 2400 µs (180°)</text>
+  
+  
+  <!-- BLOQUE ESQUEMÁTICO SERVO 1. BASE (GIRO HORIZONTAL) (D8) -->
+  <!-- Línea de Señal desde U1 (475, 640) hasta (850, 530) -->
+  <path d="M 475 640 L 640 640 L 640 530 L 850 530" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="648" y="523" fill="#2563eb" font-size="11.5" font-weight="700">SEÑAL D8 (Pin Interno)</text>
+
+  <!-- Derivación de +5V (Centro) desde X=680 hasta (850, 560) -->
+  <circle cx="680" cy="560" r="4.5" fill="#dc2626"/>
+  <line x1="680" y1="560" x2="850" y2="560" stroke="#dc2626" stroke-width="2"/>
+  <text x="765" y="555" fill="#dc2626" font-size="10.5" font-weight="700" text-anchor="middle">+5V (Pin Central)</text>
+
+  <!-- Derivación de GND (Afuera) desde X=720 hasta (850, 590) -->
+  <circle cx="720" cy="590" r="4.5" fill="#0f172a"/>
+  <line x1="720" y1="590" x2="850" y2="590" stroke="#0f172a" stroke-width="2"/>
+  <text x="785" y="585" fill="#0f172a" font-size="10.5" font-weight="700" text-anchor="middle">GND (Pin Externo)</text>
+
+  <!-- Símbolo del Servomotor M1 -->
+  <rect x="850" y="505" width="390" height="110" rx="6" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="932" cy="560" r="31" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="932" y="557" fill="#1e3a8a" font-size="15" font-weight="700" text-anchor="middle">M</text>
+  <text x="932" y="572" fill="#1d4ed8" font-size="10.5" font-weight="700" text-anchor="middle">PWM 50Hz</text>
+
+  <text x="858" y="534" fill="#0f172a" font-size="11" font-weight="700">1: S</text>
+  <text x="858" y="564" fill="#dc2626" font-size="11" font-weight="700">2: V+</text>
+  <text x="858" y="594" fill="#0f172a" font-size="11" font-weight="700">3: G</text>
+
+  <text x="975" y="539" fill="#0f172a" font-size="14" font-weight="700">M1: 1. BASE (GIRO HORIZONTAL)</text>
+  <text x="975" y="561" fill="#334155" font-size="11.5">Modelo: Micro-Servo SG90 (180°)</text>
+  <text x="975" y="581" fill="#334155" font-size="11.5">Conector: Peine 3P D8 en GBK Shield</text>
+  <text x="975" y="600" fill="#475569" font-size="11">Pulso: 544 µs (0°) a 2400 µs (180°)</text>
+  
+
+  <!-- ==================== RÓTULO TÉCNICO (ABAJO A LA DERECHA) ==================== -->
+  <g transform="translate(755, 655)">
+    <rect x="0" y="0" width="517" height="137" fill="#f1f5f9" stroke="#0f172a" stroke-width="2"/>
+    <line x1="0" y1="36" x2="517" y2="36" stroke="#0f172a" stroke-width="1.5"/>
+    <line x1="0" y1="72" x2="517" y2="72" stroke="#0f172a" stroke-width="1.5"/>
+    <line x1="0" y1="105" x2="517" y2="105" stroke="#0f172a" stroke-width="1.5"/>
+    <line x1="365" y1="36" x2="365" y2="137" stroke="#0f172a" stroke-width="1.5"/>
+
+    <text x="12" y="23" fill="#0f172a" font-size="13" font-weight="700">PROYECTO: BRAZO ROBÓTICO 4 DoF — TALLER DE AUTOMATIZACIÓN 7° AÑO</text>
+    <text x="12" y="59" fill="#0f172a" font-size="12">PLACA: Arduino Nano + GBK IoT Shield Rev. 1.0</text>
+    <text x="377" y="59" fill="#0f172a" font-size="12">ESCALA: S/E</text>
+    <text x="12" y="93" fill="#0f172a" font-size="12">ACTUADORES: 4x Servos SG90 (D8, D9, D10, D11)</text>
+    <text x="377" y="93" fill="#0f172a" font-size="12">HOJA: 1 / 1</text>
+    <text x="12" y="125" fill="#0f172a" font-size="12">AUTOR: Fabricio Alvarez (ea00d009)</text>
+    <text x="377" y="125" fill="#0f172a" font-size="12">LICENCIA: MIT</text>
+  </g>
+</svg>
