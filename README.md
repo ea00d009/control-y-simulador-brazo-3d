@@ -4,6 +4,12 @@ Panel de control interactivo y **Gemelo Digital 3D en tiempo real** para un braz
 
 El sistema funciona de manera **100% offline** desde cualquier navegador compatible con Web Serial (Google Chrome o Microsoft Edge), manteniendo sincronizados ("hermanados") en todo momento el modelo 3D en pantalla y el brazo físico real.
 
+## 🎥 Demostración en Vivo
+
+[![Demostración del Panel de Control y Gemelo Digital 3D](demo_panel.gif)](demo_panel.mp4)
+
+> 💡 *La vista previa animada (`demo_panel.gif`) se reproduce automáticamente arriba. También podés [abrir o descargar el video en alta definición (`demo_panel.mp4`)](demo_panel.mp4).*
+
 ---
 
 ## ✨ Características del Panel de Control y Gemelo Digital 3D (`panel_control.html`)
